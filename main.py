@@ -12,10 +12,9 @@ from csv_handler import CsvHandler
 def main():
     print("main処理開始")
     csvHandler = CsvHandler("data/train.csv")
-    header = csvHandler.checkHead()
-    column = csvHandler.checkColumn()
-    print(f"header: {header}")
-    print(f"column: {column}")
+    csvHandler.get_record(20)
+    csvHandler.get_all_missing_values_count()
+   
 
 
 if __name__ == "__main__":
