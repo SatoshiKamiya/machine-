@@ -94,14 +94,44 @@ class CsvHandler:
     def drop_columns(self, columns_array):
         print("CsvHandler drop_columns")
         self._csv_data.drop(columns_array, axis=1, inplace=True)
-        
+
+    #平均値取得（カラム指定）
+    def average_value(self, column_name):
+        print("CsvHandler average_value")
+        result = self._csv_data[column_name].mean()
+        print(result) 
+
    #平均値補間（カラム指定）
     def average_value_interpolation(self, column_name):
         print("CsvHandler average_value_interpolation")
         result = self._csv_data[column_name].fillna(self._csv_data[column_name].mean())
         print(result) 
+
+    #中央値取得（カラム指定）
+    def median_value(self, column_name):
+        print("CsvHandler median_value")
+        result = self._csv_data[column_name].median()
+        print(result) 
+    
+    #中央値補間（カラム指定）
+    def median_value_interpolation(self, column_name):
+        print("CsvHandler median_value_interpolation")
+        result = self._csv_data[column_name].fillna(self._csv_data[column_name].median())
+        print(result) 
+   
+    #最頻値取得（カラム指定）
+    def mode_value(self, column_name):
+        print("CsvHandler mode_value")
+        result = self._csv_data[column_name].mode()[0]
+        print(result) 
+
+    #最頻値補間（カラム指定）
+    def mode_value_interpolation(self, column_name):
+        print("CsvHandler mode_value_interpolation")
+        result = self._csv_data[column_name].fillna(self._csv_data[column_name].mode()[0])
+        print(result) 
             
-   #小数点切り捨て（カラム指定）
+   #小数点切り捨て（カラム指定）　←　平均と補完と組み合わせられないので要調査
     def decimal_point_truncation(self, column_name):
         print("CsvHandler decimal_point_truncation")
         result = self._csv_data[column_name].fillna(0).astype('int64')

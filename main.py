@@ -18,7 +18,10 @@ def main():
     count = csvHandler.get_records_count()
     # csvHandler.get_specification_record(['Age'], count)
     # csvHandler.average_value_interpolation('Age')
-    csvHandler.decimal_point_truncation('Age') # ←average_value_interpolationと組み合わせるとうまく起動しない
+    csvHandler.mode_value_interpolation('Age') # ←average_value_interpolationと組み合わせるとうまく起動しない
+    csvHandler.average_value('Age')
+    csvHandler.median_value('Age')
+    csvHandler.mode_value('Age')
 
 
 if __name__ == "__main__":

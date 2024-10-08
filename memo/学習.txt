@@ -1,0 +1,4 @@
+参考サイト
+
+欠損値補完：https://www.soumu.go.jp/main_content/000741247.pdf
+基礎学習　：https://www.stat.go.jp/teacher/comp-learn-04.html
