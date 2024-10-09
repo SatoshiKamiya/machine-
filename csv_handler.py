@@ -137,12 +137,17 @@ class CsvHandler:
         result = self._csv_data[column_name].fillna(0).astype('int64')
         # result = np.floor(self._csv_data[column_name])
         print(result) 
-   
-   #中央値
-   #最頻値
-   #中央値
 
+# 相関係数
+    # 1対1相関係数表示
+    def correlation_coefficient_oto(self, column_name):
+    # 1対多相関係数表示
+    def correlation_coefficient_otm(self, column_name):
 
+# 多重代入法   
+   #MICE
+    def multiple_imputation_MICE(self, column_name):
+        
 
 
 # 外れ値チェック
