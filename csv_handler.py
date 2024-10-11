@@ -1,6 +1,9 @@
 import pandas as pd
 import os
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from statsmodels.imputation.mice import MICEData
 
 # csvファイル処理クラス
 class CsvHandler:
@@ -141,13 +144,46 @@ class CsvHandler:
 # 相関係数
     # 1対1相関係数表示
     def correlation_coefficient_oto(self, column_name):
+         corr_matrix = self._csv_data.select_dtypes(include='number').corr()
+         result = corr_matrix[column_name]
+         print(result) 
+
     # 1対多相関係数表示
-    def correlation_coefficient_otm(self, column_name):
+    def correlation_coefficient_otm(self):
+        result = self._csv_data.select_dtypes(include='number').corr()
+        print(result) 
+        # グラフ表示
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(result, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
+        plt.show()
 
 # 多重代入法   
    #MICE
-    def multiple_imputation_MICE(self, column_name):
-        
+    def multiple_imputation_MICE(self, column_names):
+        csv_data_selected = self._csv_data[column_names]
+
+        mice_data = MICEData(csv_data_selected)
+        for i in range(10):
+            mice_data.update_all()
+        result = mice_data.data
+        print(result)
 
 
 # 外れ値チェック
+
+
+# 可視化
+    # ヒストグラム
+    def show_hist(self):
+        self._csv_data.hist(figsize=(10, 10), bins=30)
+        plt.show()
+
+    # カーネル密度推定（KDE）
+    def show_kds(self):
+        sns.kdeplot(self._csv_data, shade=True)
+        plt.show()
+    
+     # ペアプロット）
+    def show_pair_plot(self):
+        sns.pairplot(self._csv_data, diag_kind='kde')
+        plt.show()

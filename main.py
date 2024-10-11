@@ -12,17 +12,23 @@ from csv_handler import CsvHandler
 def main():
     print("main処理開始")
     csvHandler = CsvHandler("data/train.csv")
-    # csvHandler.get_record(20)
+    csvHandler.get_record(20)
     # csvHandler.drop_records([2,6,8])
     # csvHandler.drop_records_area(2,8)
-    count = csvHandler.get_records_count()
+    # count = csvHandler.get_records_count()
     # csvHandler.get_specification_record(['Age'], count)
     # csvHandler.average_value_interpolation('Age')
-    csvHandler.mode_value_interpolation('Age') # ←average_value_interpolationと組み合わせるとうまく起動しない
-    csvHandler.average_value('Age')
-    csvHandler.median_value('Age')
-    csvHandler.mode_value('Age')
+    # csvHandler.mode_value_interpolation('Age') # ←average_value_interpolationと組み合わせるとうまく起動しない
+    # csvHandler.average_value('Age')
+    # csvHandler.median_value('Age')
+    # csvHandler.mode_value('Age')
+    # csvHandler.correlation_coefficient_oto('Age')
+    # csvHandler.correlation_coefficient_otm()
+    # csvHandler.multiple_imputation_MICE(['Pclass','Age','SibSp'])
 
+    # csvHandler.show_hist()
+    # csvHandler.show_kds()
+    csvHandler.show_pair_plot()
 
 if __name__ == "__main__":
     main()

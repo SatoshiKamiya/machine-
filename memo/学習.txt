@@ -41,3 +41,5 @@
 基礎学習　：https://www.stat.go.jp/teacher/comp-learn-04.html
 https://www.codexa.net/missing_value_python/
 https://qiita.com/innovation1005/items/b712ce54a7a697a9bf03
+ペアプロット図：https://pygraph.helve-blog.com/seaborn/pairplot
+ランダムフォレストによる補完：https://qiita.com/jun40vn/items/d8a1f71fae680589e05c
