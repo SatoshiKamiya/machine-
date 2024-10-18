@@ -4,6 +4,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.imputation.mice import MICEData
+from sklearn.ensemble import RandomForestRegressor
 
 # csvファイル処理クラス
 class CsvHandler:
@@ -25,6 +26,20 @@ class CsvHandler:
             print(f"ファイルが見つかりません: {path}")
 
 
+#データ取得 
+    # インスタンス
+    def get_original_data_instance(self):
+        return self._original_csv_data
+    
+    # 1つのカラム取得
+    def choose_column_data_instance(self, column_name):
+        return self._original_csv_data[column_name]
+    
+    # 複数カラム取得
+    def choose_columns_data_instance(self, column_names):
+        return self._original_csv_data[column_names]
+
+
 #データチェック
     # データ取得
     def get_record(self, record_count):
@@ -41,7 +56,7 @@ class CsvHandler:
     # データチェック
     def get_table_info(self):
         print("CsvHandler get_table_info")
-        result = self._csv_data.info()
+        result = self._csv_data.info
         print(result)
 
     # カラム表示
@@ -81,6 +96,18 @@ class CsvHandler:
     # データ初期化
     def reset_data(self):
         self._csv_data = self._original_csv_data
+    
+    # カラムを指定して欠損値のある行を指定
+    def get_drop_records_number(self, column):
+        result = self._csv_data[self._csv_data[column].isnull()].index
+        print("CsvHandler get_drop_records_number result:", result)
+        return result
+
+    # 行数を指定してそのレコードを取得
+    def get_assignment_records(self, column, record_numbers):
+        result = self._csv_data[column].loc[record_numbers]
+        print("CsvHandler get_assignment_records result:", result)
+
 
 # 欠損値補間 
    #行削除
@@ -167,6 +194,44 @@ class CsvHandler:
             mice_data.update_all()
         result = mice_data.data
         print(result)
+
+        
+    #ランダムフォレスト
+    def random_forest(self, column_array):
+        print("ModelProcesrandom_forest column_array:", column_array)
+        # age_df = self.data_instance.get_record(10)
+
+        # 推定に使用する項目を指定
+        age_df = self._csv_data[column_array]
+        
+        # ラベル特徴量をワンホットエンコーディング
+        age_df=pd.get_dummies(age_df)
+
+        # 学習データとテストデータに分離し、numpyに変換
+        known_age = age_df[age_df.Age.notnull()].values  
+        unknown_age = age_df[age_df.Age.isnull()].values
+
+        # 学習データをX, yに分離
+        X = known_age[:, 1:]  
+        y = known_age[:, 0]
+
+        # ランダムフォレストで推定モデルを構築
+        rfr = RandomForestRegressor(random_state=0, n_estimators=100, n_jobs=-1)
+        rfr.fit(X, y)
+
+        # 推定モデルを使って、テストデータのAgeを予測し、補完
+        predictedAges = rfr.predict(unknown_age[:, 1::])
+        self._csv_data.loc[(self._csv_data.Age.isnull()), 'Age'] = predictedAges 
+        self.get_specification_record('Age', 890)
+        
+        # 年齢別生存曲線と死亡曲線
+        facet = sns.FacetGrid(self._csv_data[0:890], hue="Survived",aspect=2)
+        facet.map(sns.kdeplot,'Age',shade= True)
+        facet.set(xlim=(0, self._csv_data.loc[0:890,'Age'].max()))
+        facet.add_legend()
+        plt.show()     
+
+
 
 
 # 外れ値チェック

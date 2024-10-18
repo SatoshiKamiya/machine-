@@ -7,12 +7,29 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from csv_handler import CsvHandler
-
+from model_process import ModelProcess
 
 def main():
     print("main処理開始")
     csvHandler = CsvHandler("data/train.csv")
-    csvHandler.get_record(20)
+
+    # データチェック
+    csvHandler.get_table_info()
+
+    # 指定したデータチェック
+    csvHandler.get_specification_record('Age', display_num=891)
+
+    # カラムを指定して欠損値のあるレコードNoを取得
+    records_number_array = csvHandler.get_drop_records_number('Age')
+    csvHandler.get_assignment_records('Age', records_number_array)
+
+    # csvHandler.random_forest(['Age', 'Pclass','Sex','Parch','SibSp'])
+
+
+
+
+
+    
     # csvHandler.drop_records([2,6,8])
     # csvHandler.drop_records_area(2,8)
     # count = csvHandler.get_records_count()
@@ -28,7 +45,7 @@ def main():
 
     # csvHandler.show_hist()
     # csvHandler.show_kds()
-    csvHandler.show_pair_plot()
+    # csvHandler.show_pair_plot()
 
 if __name__ == "__main__":
     main()
