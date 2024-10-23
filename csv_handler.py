@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.imputation.mice import MICEData
 from sklearn.ensemble import RandomForestRegressor
+from enum_collection import Rounding
 
 # csvファイル処理クラス
 class CsvHandler:
@@ -161,12 +162,36 @@ class CsvHandler:
         result = self._csv_data[column_name].fillna(self._csv_data[column_name].mode()[0])
         print(result) 
             
-   #小数点切り捨て（カラム指定）　←　平均と補完と組み合わせられないので要調査
-    def decimal_point_truncation(self, column_name):
-        print("CsvHandler decimal_point_truncation")
-        result = self._csv_data[column_name].fillna(0).astype('int64')
-        # result = np.floor(self._csv_data[column_name])
+#    #小数点切り捨て（カラム指定）　←　平均と補完と組み合わせられないので要調査
+#     def decimal_point_truncation(self, column_name):
+#         print("CsvHandler decimal_point_truncation")
+#         result = self._csv_data[column_name].fillna(0).astype('int64')
+#         # result = np.floor(self._csv_data[column_name])
+#         print(result) 
+
+   # 端数処理（カラム指定）
+    def rounding_process(self, column_name, rounding_type, decimal_point_position):
+        print("CsvHandler rounding_process")
+        # 四捨五入処理 
+        if(rounding_type == Rounding.ROUNDINGUP):
+            print("CsvHandler rounding_process ROUNDINGUP　四捨五入")
+            if(0 < decimal_point_position):
+                self._csv_data[column_name] = self._csv_data[column_name].apply(lambda x: round(x, decimal_point_position))
+            else:
+                 self._csv_data[column_name] = self._csv_data[column_name].round().astype(int)
+        # 丸め処理    
+        elif(rounding_type == Rounding.TRUNCATE):
+             print("CsvHandler rounding_process TRUNCATE 少数切り捨て")
+             if(0 < decimal_point_position):
+                 digit_adjustment_num = 10**decimal_point_position
+                 self._csv_data[column_name] = self._csv_data[column_name].apply(lambda x: np.floor(x * digit_adjustment_num) / digit_adjustment_num)
+             else:
+                 self._csv_data[column_name] = self._csv_data[column_name].astype(int)    
+        result = self._csv_data[column_name]
         print(result) 
+
+       
+       
 
 # 相関係数
     # 1対1相関係数表示
@@ -225,11 +250,11 @@ class CsvHandler:
         self.get_specification_record('Age', 890)
         
         # 年齢別生存曲線と死亡曲線
-        facet = sns.FacetGrid(self._csv_data[0:890], hue="Survived",aspect=2)
-        facet.map(sns.kdeplot,'Age',shade= True)
-        facet.set(xlim=(0, self._csv_data.loc[0:890,'Age'].max()))
-        facet.add_legend()
-        plt.show()     
+        # facet = sns.FacetGrid(self._csv_data[0:890], hue="Survived",aspect=2)
+        # facet.map(sns.kdeplot,'Age',shade= True)
+        # facet.set(xlim=(0, self._csv_data.loc[0:890,'Age'].max()))
+        # facet.add_legend()
+        # plt.show()     
 
 
 
@@ -239,9 +264,15 @@ class CsvHandler:
 
 # 可視化
     # ヒストグラム
-    def show_hist(self):
+    def show_all_column_hist(self):
         self._csv_data.hist(figsize=(10, 10), bins=30)
         plt.show()
+    
+        # ヒストグラム（指定）
+    def show_part_column_hist(self, columns):
+        self._csv_data[columns].hist(figsize=(10, 10), bins=30)
+        plt.show()
+
 
     # カーネル密度推定（KDE）
     def show_kds(self):
