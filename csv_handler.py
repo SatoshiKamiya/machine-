@@ -77,6 +77,18 @@ class CsvHandler:
         print("CsvHandler get_matrix_num")
         result = self._csv_data.shape
         print(result)
+    
+    # カラム値と利用回数を取得
+    def get_value_and_count(self ,columns):
+        print("CsvHandler get_value_and_count")
+        for column in self._csv_data[columns]:
+            print(f"Column: {column}")
+            result = self._csv_data[column].value_counts()
+
+            print("CsvHandler get_value_and_count result")
+            print("\n")
+            print(result)
+            print("\n") 
 
     # 総データ数取得チェック
     def get_records_count(self):
@@ -109,6 +121,11 @@ class CsvHandler:
         result = self._csv_data[column].loc[record_numbers]
         print("CsvHandler get_assignment_records result:", result)
 
+# 値変換 
+   #文字列→数値変換
+    def change_text_to_int(self, records_array):
+        print("CsvHandler drop_records")
+        self._csv_data.drop(records_array, axis=0, inplace=True)  
 
 # 欠損値補間 
    #行削除
@@ -268,11 +285,21 @@ class CsvHandler:
         self._csv_data.hist(figsize=(10, 10), bins=30)
         plt.show()
     
-        # ヒストグラム（指定）
+    # ヒストグラム（指定）
     def show_part_column_hist(self, columns):
         self._csv_data[columns].hist(figsize=(10, 10), bins=30)
         plt.show()
 
+    # ヒストグラム（カラム＋カラム内データ指定）
+    def show_part_column_recrods_hist(self, column_name, records):
+        # ヒストグラムの重ね描き
+        plt.figure(figsize=(10, 10))
+        # Aカラムのヒストグラム
+        plt.hist(self._csv_data[column_name], bins=30, alpha=0.5, label='base', color='blue')
+        plt.hist(self._csv_data[column_name].loc[records], bins=30, alpha=0.5, label=column_name, color='orange')
+        plt.legend()
+        # グラフを表示
+        plt.show()
 
     # カーネル密度推定（KDE）
     def show_kds(self):

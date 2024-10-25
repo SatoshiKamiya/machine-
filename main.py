@@ -17,8 +17,11 @@ def main():
     # データチェック
     csvHandler.get_table_info()
 
+    # カラムを指定して欠損値のあるレコードNoを取得
+    csvHandler.get_value_and_count(['Sex','Embarked'])
+
     # 指定したデータチェック
-    csvHandler.get_specification_record('Age', display_num=891)
+    # csvHandler.get_specification_record('Age', display_num=891)
 
 
     # カラムを指定して欠損値のあるレコードNoを取得
@@ -31,7 +34,12 @@ def main():
     csvHandler.get_assignment_records('Age', records_number_array)
 
     # 端数処理（カラム指定）
-    csvHandler.rounding_process(['Age'],  Rounding.ROUNDINGUP, 5)
+    csvHandler.rounding_process(['Age'],  Rounding.ROUNDINGUP, 0)
+
+    # 補完の値チェック
+    csvHandler.get_assignment_records('Age', records_number_array)
+
+    csvHandler.show_part_column_recrods_hist('Age', records_number_array)
 
 
     # 値の統計量

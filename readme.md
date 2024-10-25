@@ -1,6 +1,8 @@
 # バージョン
 
 - python：3.11.6
+- 他モジュールはrequirements.txt参照
+
 
 # 仮想環境構築
 
