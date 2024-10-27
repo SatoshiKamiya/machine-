@@ -138,7 +138,7 @@ class CsvHandler:
         print("CsvHandler get_assignment_records result:", result)
 
     # 値変換
-    # 文字列→数値変換
+    # ラベルエンコーディング（文字列→数値変換）
     def change_text_to_int(self, column_name):
         print("change_text_to_int")
         # カラム内の値をリスト化
