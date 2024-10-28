@@ -9,6 +9,7 @@ from enum_collection import Rounding
 from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.model_selection import train_test_split
 from constant import Constant
+from sklearn.preprocessing import StandardScaler
 
 
 # csvファイル処理クラス
@@ -18,7 +19,7 @@ class CsvHandler:
 
     # コンストラクタ
     def __init__(self, path):
-        print("CsvHandler__init__ path:", path)
+        print("CsvHandler __init__ path:", path)
         # 表示制限解除
         pd.set_option("display.max_rows", None)
         # pd.set_option("display.width", None)
@@ -35,7 +36,6 @@ class CsvHandler:
             print(f"ファイルが見つかりません: {path}")
 
     # データ取得
-    # インスタンス
     # インスタンス
     def get_data_instance(self):
         return self._csv_data
@@ -114,7 +114,7 @@ class CsvHandler:
 
     # 各カラムの型チェック
     def get_column_type(self):
-        print("get_column_type")
+        print("CsvHandler get_column_type")
         result = pd.DataFrame(self._csv_data)
         print(result.dtypes)
 
@@ -140,13 +140,25 @@ class CsvHandler:
     # 値変換
     # ラベルエンコーディング（文字列→数値変換）
     def change_text_to_int(self, column_name):
-        print("change_text_to_int")
+        print("CsvHandler change_text_to_int")
         # カラム内の値をリスト化
         unique_values = self._csv_data[column_name].unique().tolist()
         print("change_text_to_int unique_values=", unique_values)
         self._csv_data[column_name] = self._csv_data[column_name].map(
             lambda x: unique_values.index(x) if x in unique_values else x
         )
+
+    # 標準化（平均0、分散1にスケーリング） ←これ使っておけば問題なさそう
+    def change_standardize(self, column_names):
+        print("CsvHandler change_standardize")
+        df = self._csv_data
+        df[column_names] = StandardScaler().fit_transform(df[column_names])
+        # 結果確認
+        print(df[columns_to_standardize].head())
+
+
+    # 正規化（最小値0、最大値1スケーリング）
+
 
     # 欠損値補間
     # 行削除
@@ -267,7 +279,7 @@ class CsvHandler:
 
     # ランダムフォレスト
     def random_forest(self, column_array):
-        print("ModelProcesrandom_forest column_array:", column_array)
+        print("CsvHandler ModelProcesrandom_forest column_array:", column_array)
         # age_df = self.data_instance.get_record(10)
 
         # 推定に使用する項目を指定
@@ -304,7 +316,7 @@ class CsvHandler:
     # point_column:補完対象カラム
     # column_array:補完対象外で利用するカラム
     def gradient_boosting(self, point_column, column_array):
-        print("gradient_boosting")
+        print("CsvHandler gradient_boosting")
         model = HistGradientBoostingRegressor()
         df = self._csv_data
         # 欠損していないデータを抽出（学習データ）
