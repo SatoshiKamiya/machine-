@@ -440,3 +440,12 @@ class CsvHandler:
     def show_pair_plot(self):
         sns.pairplot(self._csv_data, diag_kind="kde")
         plt.show()
+
+    # ボックスプロット（箱ひげ図）
+    def show_block_plot(self, column_names):
+        df = self._csv_data
+        plt.figure(figsize=(8, 6))
+        plt.boxplot([df[col] for col in column_names], labels=column_names)
+        plt.title("Box Plot")
+        plt.ylabel("Values")
+        plt.show()

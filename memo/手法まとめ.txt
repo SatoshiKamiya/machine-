@@ -31,7 +31,14 @@ One-Class SVM（Support Vector Machine
 DBSCANクラスタリング（Density-Based Spatial Clustering of Applications with Noise）
 
 
-課題
+■モデル
+・
+・
+・
+・
+
+
+■課題
 全般
 データがどれだけ正規分布に従っているかチェックする方法
 
