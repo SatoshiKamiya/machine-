@@ -15,42 +15,44 @@ def main():
     print("main処理開始")
     # 1つ目のモデル用
     csvHandler = CsvHandler("data/train.csv")
+
+    # csvHandler.show_block_plot(["Age"])
     # 2つ目のモデル用
-    csvHandler02 = CsvHandler("data/train.csv")
+    # csvHandler02 = CsvHandler("data/train.csv")
 
-    # データチェック
-    # csvHandler.get_table_info()
-    csvHandler.get_column_type()
+    # # データチェック
+    # # csvHandler.get_table_info()
+    # csvHandler.get_column_type()
 
-    # カラムを指定して欠損値のあるレコードNoを取得
-    # csvHandler.get_value_and_count(["Sex", "Embarked"])
+    # # カラムを指定して欠損値のあるレコードNoを取得
+    # # csvHandler.get_value_and_count(["Sex", "Embarked"])
 
-    # カラムを指定して欠損値のあるレコードNoを取得
-    csvHandler.change_text_to_int("Sex")
+    # # カラムを指定して欠損値のあるレコードNoを取得
+    # csvHandler.change_text_to_int("Sex")
 
-    # 指定したデータチェック
-    csvHandler.get_specification_record("Sex", display_num=20)
+    # # 指定したデータチェック
+    # csvHandler.get_specification_record("Sex", display_num=20)
 
-    # カラムを指定して欠損値のあるレコードNoを取得
-    records_number_array = csvHandler.get_drop_records_number("Age")
+    # # カラムを指定して欠損値のあるレコードNoを取得
+    # records_number_array = csvHandler.get_drop_records_number("Age")
 
-    # 勾配ブースティング
-    csvHandler.gradient_boosting("Age", ["Pclass", "Sex", "Parch", "SibSp"])
-    # 端数処理（カラム指定）
-    csvHandler.rounding_process(["Age"], Rounding.ROUNDINGUP, 0)
+    # # 勾配ブースティング
+    # csvHandler.gradient_boosting("Age", ["Pclass", "Sex", "Parch", "SibSp"])
+    # # 端数処理（カラム指定）
+    # csvHandler.rounding_process(["Age"], Rounding.ROUNDINGUP, 0)
 
-    # 補完の値チェック
-    csvHandler.get_assignment_records("Age", records_number_array)
+    # # 補完の値チェック
+    # csvHandler.get_assignment_records("Age", records_number_array)
 
-    # ランダムフォレストによる補完
-    csvHandler02.random_forest(["Age", "Pclass", "Sex", "Parch", "SibSp"])
-    csvHandler02.rounding_process(["Age"], Rounding.ROUNDINGUP, 0)
-    csvHandler.show_part_column_recrods_hist(
-        "Age",
-        csvHandler.get_data_instance(),
-        csvHandler02.get_data_instance(),
-        records_number_array,
-    )
+    # # ランダムフォレストによる補完
+    # csvHandler02.random_forest(["Age", "Pclass", "Sex", "Parch", "SibSp"])
+    # csvHandler02.rounding_process(["Age"], Rounding.ROUNDINGUP, 0)
+    # csvHandler.show_part_column_recrods_hist(
+    #     "Age",
+    #     csvHandler.get_data_instance(),
+    #     csvHandler02.get_data_instance(),
+    #     records_number_array,
+    # )
 
     # カラムを指定して欠損値のあるレコードNoを取得
     # records_number_array = csvHandler.get_drop_records_number('Age')
