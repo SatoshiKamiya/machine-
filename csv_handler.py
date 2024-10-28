@@ -82,12 +82,6 @@ class CsvHandler:
         result = self._csv_data.shape
         print(result)
 
-    # 行列数
-    def get_matrix_num(self):
-        print("CsvHandler get_matrix_num")
-        result = self._csv_data.shape
-        print(result)
-
     # カラム値と利用回数を取得
     def get_value_and_count(self, columns):
         print("CsvHandler get_value_and_count")
@@ -107,9 +101,9 @@ class CsvHandler:
         return result
 
     # 各カラムの欠損値数チェック
-    def get_data_describe(self):
+    def get_data_isnull(self):
         print("CsvHandler get_data_describe")
-        result = self._csv_data.describe()
+        result = self._csv_data.isnull().sum()
         print(result)
 
     # 各カラムの型チェック
@@ -154,11 +148,9 @@ class CsvHandler:
         df = self._csv_data
         df[column_names] = StandardScaler().fit_transform(df[column_names])
         # 結果確認
-        print(df[columns_to_standardize].head())
-
+        print(df[column_names].head())
 
     # 正規化（最小値0、最大値1スケーリング）
-
 
     # 欠損値補間
     # 行削除
