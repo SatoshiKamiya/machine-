@@ -29,13 +29,22 @@ def main():
     # 欠損値確認
     csvHandler.get_data_isnull()
 
-    # カラムはじき（）
-
+    # カラムはじき（PassengerId Name SibSp Parch Ticket Cabin Embarked）
+    # 必要なカラム：Survived　Pclass　Sex　Age　Fare　←　本来新たな特徴量を作成する特徴量エンジニアリングをする必要あり
+    csvHandler.select_columns_data(['Survived', 'Pclass', 'Sex', 'Age', 'Fare'])
+    
     # ラベルエンコーディング
+    csvHandler.label_encoder(['Sex'])
 
     # Age欠損値補完
+    csvHandler.random_forest(["Age", "Pclass", "Sex", "Parch"])
+
+    # Age単数処理
+    # csvHandler.rounding_process("Age", Rounding.TRUNCATE, 0)
 
     # データトレーニング前最終確認
+    csvHandler.get_record(10)
+    csvHandler.get_data_isnull()
 
     # ホールドアウト法によるトレーニングデータとテストデータ分割
 

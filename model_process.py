@@ -12,3 +12,7 @@ class ModelProcess:
         # 表示制限解除
         self.data_instance = data_instance
 
+    
+
+    
+

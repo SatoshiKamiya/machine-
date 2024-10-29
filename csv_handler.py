@@ -50,6 +50,11 @@ class CsvHandler:
     # 複数カラム取得
     def choose_columns_data_instance(self, column_names):
         return self._original_csv_data[column_names]
+    
+    # データ抽出　必要なカラムのみ選定し他をはじく（1回はじいたら復帰不可）
+    def select_columns_data(self, column_names):
+        print("CsvHandler select_columns_data")
+        self._csv_data = self._csv_data[column_names]
 
     # データチェック
     # データ取得
@@ -133,14 +138,22 @@ class CsvHandler:
 
     # 値変換
     # ラベルエンコーディング（文字列→数値変換）
-    def change_text_to_int(self, column_name):
-        print("CsvHandler change_text_to_int")
+    def label_encoder(self, column_names):
+        print("CsvHandler label_encoder")
         # カラム内の値をリスト化
-        unique_values = self._csv_data[column_name].unique().tolist()
-        print("change_text_to_int unique_values=", unique_values)
-        self._csv_data[column_name] = self._csv_data[column_name].map(
-            lambda x: unique_values.index(x) if x in unique_values else x
-        )
+        for col in column_names:
+            unique_values = self._csv_data[col].unique().tolist()
+            print(f"CsvHandler label_encoder unique_values for {col} =", unique_values)
+        
+            # 各カラムごとに置換
+            self._csv_data[col] = self._csv_data[col].map(
+                lambda x: unique_values.index(x) if x in unique_values else x
+            )
+        # unique_values = self._csv_data[column_names].unique().tolist()
+        # print("label_encoder unique_values=", unique_values)
+        # self._csv_data[column_names] = self._csv_data[column_names].map(
+        #     lambda x: unique_values.index(x) if x in unique_values else x
+        # )
 
     # 標準化（平均0、分散1にスケーリング） ←これ使っておけば問題なさそう
     def change_standardize(self, column_names):
@@ -215,7 +228,7 @@ class CsvHandler:
     #         # result = np.floor(self._csv_data[column_name])
     #         print(result)
 
-    # 端数処理（カラム指定）
+    # 端数処理（カラム指定） ←NAN（欠損値があるとエラーになるので欠損値ない状態で処理実行のこと）
     def rounding_process(self, column_name, rounding_type, decimal_point_position):
         print("CsvHandler rounding_process")
         # 四捨五入処理
