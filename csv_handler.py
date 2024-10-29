@@ -28,10 +28,17 @@ class CsvHandler:
         self.path = path
 
         if os.path.exists(path):
+            # トレーニングデータとテストデータを連結してデータ整形する
+            train_data = pd.read_csv(path)
+            test_data = pd.read_csv("data/test.csv")
+            # train_dataとtest_dataの連結
+            test_data["Survived"] = np.nan
+            df = pd.concat([train_data, test_data], ignore_index=True, sort=False)
+
             # オリジナルデータ変数
-            self._original_csv_data = pd.read_csv(path)
+            self._original_csv_data = df
             # 変更に対応するデータ変数
-            self._csv_data = self._original_csv_data
+            self._csv_data = df
         else:
             print(f"ファイルが見つかりません: {path}")
 
@@ -50,7 +57,7 @@ class CsvHandler:
     # 複数カラム取得
     def choose_columns_data_instance(self, column_names):
         return self._original_csv_data[column_names]
-    
+
     # データ抽出　必要なカラムのみ選定し他をはじく（1回はじいたら復帰不可）
     def select_columns_data(self, column_names):
         print("CsvHandler select_columns_data")
@@ -65,7 +72,7 @@ class CsvHandler:
 
     # データ取得（カラム指定）
     def get_specification_record(self, labels, display_num=10):
-        print("CsvHandler get_record")
+        print("CsvHandler get_specification_record")
         result = self._csv_data[labels].head(display_num)
         print(result)
 
@@ -144,7 +151,7 @@ class CsvHandler:
         for col in column_names:
             unique_values = self._csv_data[col].unique().tolist()
             print(f"CsvHandler label_encoder unique_values for {col} =", unique_values)
-        
+
             # 各カラムごとに置換
             self._csv_data[col] = self._csv_data[col].map(
                 lambda x: unique_values.index(x) if x in unique_values else x
@@ -253,7 +260,7 @@ class CsvHandler:
             else:
                 self._csv_data[column_name] = self._csv_data[column_name].astype(int)
         result = self._csv_data[column_name]
-        print(result)
+        # print(result)
 
     # 相関係数
     # 1対1相関係数表示
@@ -283,32 +290,35 @@ class CsvHandler:
         print(result)
 
     # ランダムフォレスト
-    def random_forest(self, column_array):
+    def random_forest(self, target_column, column_array):
+        print("CsvHandler ModelProcesrandom_forest target_column:", target_column)
         print("CsvHandler ModelProcesrandom_forest column_array:", column_array)
         # age_df = self.data_instance.get_record(10)
 
         # 推定に使用する項目を指定
-        age_df = self._csv_data[column_array]
+        target_df = self._csv_data[column_array]
 
         # ラベル特徴量をワンホットエンコーディング
-        age_df = pd.get_dummies(age_df)
+        target_df = pd.get_dummies(target_df)
 
         # 学習データとテストデータに分離し、numpyに変換
-        known_age = age_df[age_df.Age.notnull()].values
-        unknown_age = age_df[age_df.Age.isnull()].values
+        known_target_df = target_df[target_df[target_column].notnull()].values
+        unknown_target_df = target_df[target_df[target_column].isnull()].values
 
         # 学習データをX, yに分離
-        X = known_age[:, 1:]
-        y = known_age[:, 0]
+        X = known_target_df[:, 1:]
+        y = known_target_df[:, 0]
 
         # ランダムフォレストで推定モデルを構築
         rfr = RandomForestRegressor(random_state=0, n_estimators=100, n_jobs=-1)
         rfr.fit(X, y)
 
         # 推定モデルを使って、テストデータのAgeを予測し、補完
-        predictedAges = rfr.predict(unknown_age[:, 1::])
-        self._csv_data.loc[(self._csv_data.Age.isnull()), "Age"] = predictedAges
-        self.get_specification_record("Age", 890)
+        predictedAges = rfr.predict(unknown_target_df[:, 1::])
+        self._csv_data.loc[(self._csv_data[target_column].isnull()), target_column] = (
+            predictedAges
+        )
+        self.get_specification_record(target_column, 10)
 
         # 年齢別生存曲線と死亡曲線
         # facet = sns.FacetGrid(self._csv_data[0:890], hue="Survived",aspect=2)
@@ -394,7 +404,7 @@ class CsvHandler:
         plt.show()
 
     # 異なるモデルを比較するヒストグラム
-    def show_part_column_recrods_hist(
+    def show_compare_column_recrods_hist(
         self, column_name, models_results01, models_results02, records
     ):
         # ヒストグラムの重ね描き
