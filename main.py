@@ -56,6 +56,7 @@ def main():
     csvHandler.get_record(10)
     csvHandler.get_data_isnull()
 
+    print("----------------- data divide --------------------")
     # ホールドアウト法によるトレーニングデータとテストデータ分割
     # データセットを trainとtestに分割
     df = csvHandler.get_data_instance()
@@ -63,28 +64,35 @@ def main():
     test = df[df["Survived"].isnull()].drop("Survived", axis=1)
 
     # データフレームをnumpyに変換
-    X = train.values[:, 1:]
-    y = train.values[:, 0]
+    X = train.values[:, 1:] #トレーニングデータの1行目以降取得
+    y = train.values[:, 0] #トレーニングデータの0行目のみ取得
     test_x = test.values
 
-    # モデルへ値を渡す
-    # 採用する特徴量を25個から20個に絞り込む
-    select = SelectKBest(k=20)
 
+    # モデルへ値を渡す
+    # 採用する特徴量を25個から4個に絞り込む　←　自動で特徴量を選定してくれる
+    # 今回は絞らない（特徴量が少ないため）
+    # select = SelectKBest(k=4)
+
+    # ランダムフォレスト（2値分類）
     clf = RandomForestClassifier(
-        random_state=10,
+        random_state=10,  # ランダムで得られる数値（数値を指定すれば固定される）
         warm_start=True,  # 既にフィットしたモデルに学習を追加
-        n_estimators=26,
-        max_depth=6,
-        max_features="sqrt",
+        n_estimators=100,  # 使用する決定木の数
+        max_depth=6,      # 各決定木の深さの最大値
+        max_features="sqrt", # 各決定木で使用する特徴量の数
     )
-    pipeline = make_pipeline(select, clf)
+
+    #ハイパーパラメータ調整するなら「 グリッドサーチ」をやろう
+
+    # pipeline = make_pipeline(select, clf)
+    pipeline = make_pipeline(clf)
     pipeline.fit(X, y)
 
     # フィット結果の表示
     cv_result = cross_validate(pipeline, X, y, cv=10)
-    print("mean_score = ", np.mean(cv_result["test_score"]))
-    print("mean_std = ", np.std(cv_result["test_score"]))
+    print("mean_score = ", np.mean(cv_result["test_score"])) # 結果：mean_score = 0.8317353308364543
+    print("mean_std = ", np.std(cv_result["test_score"]))    # 結果：mean_std = 0.04801731838866762
 
 
 if __name__ == "__main__":
