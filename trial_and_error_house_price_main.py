@@ -23,47 +23,93 @@ def main():
     # カラムチェック
     print("カラムの種類", numeric_df.columns)
 
-    cor_train_df_01 = train_df[
-        [
-            "SalePrice",
-            "LotFrontage",
-            "OverallQual",
-            "YearBuilt",
-            "YearRemodAdd",
-            "MasVnrArea",
-            "BsmtFinSF1",
-            "TotalBsmtSF",
-            "1stFlrSF",
-            "2ndFlrSF",
-            "GrLivArea",
-            "FullBath",
-        ]
-    ]
+    # salePrices check
+    print("セール価格の統計値")
+    print(train_df["SalePrice"].describe())
 
-    # cor_train_df_02 = train_df[
+    # `---------------------------文字列内の相関選定--------------------------------
+    # cor_str_train_df_01 = train_df[
     #     [
     #         "SalePrice",
-    #         "TotRmsAbvGrd",
-    #         "Fireplaces",
-    #         "GarageYrBlt",
-    #         "GarageCars",
-    #         "GarageArea",
-    #         "WoodDeckSF",
-    #         "OpenPorchSF",
+    #         "Street",
+    #         "Alley",
+    #         "LotShape",
+    #         "LandContour",
+    #         "Utilities",
+    #         "LotConfig",
+    #         "LandSlope",
+    #         "Neighborhood",
+    #         "Condition1",
+    #         "Condition2",
+    #         "BldgType",
+    #         "HouseStyle",
     #     ]
     # ]
+    cor_str_train_df_02 = train_df[
+        [
+            "SalePrice",
+            "MSZoning",
+            # "RoofMatl",
+            # "Exterior1st",
+            # "Exterior2nd",
+            # "MasVnrType",
+            # "ExterQual",
+            # "ExterCond",
+            # "Foundation",
+            # "BsmtQual",
+            # "BsmtCond",
+            # "BsmtExposure",
+            # "BsmtFinType1",
+            # "BsmtFinType2",
+        ]
+    ]
+    pd.set_option("display.max_rows", 500)
+    print("head")
+    print(cor_str_train_df_02.head(300))
 
-    cor = cor_train_df_01.corr()
-    sns.heatmap(
-        cor,
-        cmap=sns.color_palette("coolwarm", 10),
-        annot=True,
-        fmt=".2f",
-        vmin=-1,
-        vmax=1,
-    )
-    plt.show()
-    # print(correlation_matrix)
+
+# `---------------------------相関係数による相関選定----------------------------
+# cor_train_df_01 = train_df[
+#     [
+#         "SalePrice",
+#         "LotFrontage",
+#         "OverallQual",
+#         "YearBuilt",
+#         "YearRemodAdd",
+#         "MasVnrArea",
+#         "BsmtFinSF1",
+#         "TotalBsmtSF",
+#         "1stFlrSF",
+#         "2ndFlrSF",
+#         "GrLivArea",
+#         "FullBath",
+#     ]
+# ]
+
+# cor_train_df_02 = train_df[
+#     [
+#         "SalePrice",
+#         "TotRmsAbvGrd",
+#         "Fireplaces",
+#         "GarageYrBlt",
+#         "GarageCars",
+#         "GarageArea",
+#         "WoodDeckSF",
+#         "OpenPorchSF",
+#     ]
+# ]
+
+# cor = cor_train_df_01.corr()
+# sns.heatmap(
+#     cor,
+#     cmap=sns.color_palette("coolwarm", 10),
+#     annot=True,
+#     fmt=".2f",
+#     vmin=-1,
+#     vmax=1,
+# )
+# plt.show()
+# print(correlation_matrix)
 
 
 if __name__ == "__main__":
