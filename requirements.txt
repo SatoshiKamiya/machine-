@@ -5,5 +5,7 @@ matplotlib==3.9.2
 seaborn==0.13.2
 streamlit==1.38.0
 statsmodels==0.14.4
+shap==0.46.0
+xgboost==2.1.2
 
 
