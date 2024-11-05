@@ -92,24 +92,24 @@ def main():
     #     ]
     # ]
 
-    cor_train_df_03 = train_df[
-        [
-            "SalePrice",
-            "BedroomAbvGr",
-            "KitchenAbvGr",
-        ]
-    ]
+    # cor_train_df_03 = train_df[
+    #     [
+    #         "SalePrice",
+    #         "BedroomAbvGr",
+    #         "KitchenAbvGr",
+    #     ]
+    # ]
 
-    cor = cor_train_df_03.corr()
-    sns.heatmap(
-        cor,
-        cmap=sns.color_palette("coolwarm", 10),
-        annot=True,
-        fmt=".2f",
-        vmin=-1,
-        vmax=1,
-    )
-    plt.show()
+    # cor = cor_train_df_03.corr()
+    # sns.heatmap(
+    #     cor,
+    #     cmap=sns.color_palette("coolwarm", 10),
+    #     annot=True,
+    #     fmt=".2f",
+    #     vmin=-1,
+    #     vmax=1,
+    # )
+    # plt.show()
     # print(correlation_matrix)
 
 
