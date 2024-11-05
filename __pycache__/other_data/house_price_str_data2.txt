@@ -1,0 +1,7 @@
+     SalePrice GarageQual GarageCond PavedDrive PoolQC  Fence MiscFeature SaleType SaleCondition
+155      79000        NaN        NaN          N    NaN    NaN         NaN       WD        Normal
+187     135000         Fa         Fa          N    NaN  MnPrv         NaN       WD        Normal
+2       223500         TA         TA          Y    NaN    NaN         NaN       WD        Normal
+6       307000         TA         TA          Y    NaN    NaN         NaN       WD        Normal
+
+178     501837         TA         TA          Y    NaN    NaN         NaN      New       Partial
