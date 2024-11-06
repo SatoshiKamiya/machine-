@@ -1,7 +1,95 @@
-     SalePrice GarageQual GarageCond PavedDrive PoolQC  Fence MiscFeature SaleType SaleCondition
-155      79000        NaN        NaN          N    NaN    NaN         NaN       WD        Normal
-187     135000         Fa         Fa          N    NaN  MnPrv         NaN       WD        Normal
-2       223500         TA         TA          Y    NaN    NaN         NaN       WD        Normal
-6       307000         TA         TA          Y    NaN    NaN         NaN       WD        Normal
+Neighborhood
+NAmes      225
+CollgCr    150
+OldTown    113
+Edwards    100
+Somerst     86
+Gilbert     79
+NridgHt     77
+Sawyer      74
+NWAmes      73
+SawyerW     59
+BrkSide     58
+Crawfor     51
+Mitchel     49
+NoRidge     41
+Timber      38
+IDOTRR      37
+ClearCr     28
+SWISU       25
+StoneBr     25
+Blmngtn     17
+MeadowV     17
+BrDale      16
+Veenker     11
+NPkVill      9
+Blueste      2
+Name: count, dtype: int64
+Neighborhood_Blmngtn    0.019066
+Neighborhood_Blueste   -0.020250
+Neighborhood_BrDale    -0.101303
+Neighborhood_BrkSide   -0.143648
+Neighborhood_ClearCr    0.055718
+Neighborhood_CollgCr    0.072626
+Neighborhood_Crawfor    0.071160
+Neighborhood_Edwards   -0.179949
+Neighborhood_Gilbert    0.035940
+Neighborhood_IDOTRR    -0.164056
+Neighborhood_MeadowV   -0.112544
+Neighborhood_Mitchel   -0.057845
+Neighborhood_NAmes     -0.188513
+Neighborhood_NPkVill   -0.037910
+Neighborhood_NWAmes     0.023483
+Neighborhood_NoRidge    0.330424
+Neighborhood_NridgHt    0.402149
+Neighborhood_OldTown   -0.192189
+Neighborhood_SWISU     -0.063705
+Neighborhood_Sawyer    -0.128394
+Neighborhood_SawyerW    0.014560
+Neighborhood_Somerst    0.140058
+Neighborhood_StoneBr    0.215363
+Neighborhood_Timber     0.126236
+Neighborhood_Veenker    0.063471
 
-178     501837         TA         TA          Y    NaN    NaN         NaN      New       Partial
+
+ExterQual
+TA    906
+Gd    488
+Ex     52
+Fa     14
+Name: count, dtype: int64
+ExterQual_Ex    0.451164
+ExterQual_Fa   -0.115149
+ExterQual_Gd    0.452466
+ExterQual_TA   -0.589044
+
+BsmtQual
+TA    649
+Gd    618
+Ex    121
+Fa     35
+Name: count, dtype: int64
+BsmtQual_Ex    0.553105
+BsmtQual_Fa   -0.128725
+BsmtQual_Gd    0.234822
+BsmtQual_TA   -0.452394
+
+KitchenQual
+TA    735
+Gd    586
+Ex    100
+Fa     39
+Name: count, dtype: int64
+KitchenQual_Ex    0.504094
+KitchenQual_Fa   -0.157199
+KitchenQual_Gd    0.321641
+KitchenQual_TA   -0.519298
+
+
+GarageFinish
+Unf    605
+RFn    422
+Fin    352
+GarageFinish_Fin    0.419678
+GarageFinish_RFn    0.169792
+GarageFinish_Unf   -0.410608

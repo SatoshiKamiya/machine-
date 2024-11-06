@@ -27,7 +27,35 @@ def main():
     print("セール価格の統計値")
     print(train_df["SalePrice"].describe())
 
-    # `---------------------------文字列データ選定--------------------------------
+    # ---------------------------One-Hot Encoding--------------------------------
+    # print("Neighborhood")
+    # print(train_df["Neighborhood"].value_counts())
+    # print("ExterQual")
+    # print(train_df["ExterQual"].value_counts())
+    # print("BsmtQual")
+    # print(train_df["BsmtQual"].value_counts())
+    # print("KitchenQual")
+    # print(train_df["KitchenQual"].value_counts())
+    # print("GarageFinish")
+    # print(train_df["GarageFinish"].value_counts())
+
+    train_df = train_df[["SalePrice", "ExterQual"]]
+
+    # One-Hot Encodingを適用
+    df_encoded = pd.get_dummies(train_df, columns=["ExterQual"]).astype(int)
+
+    print("中間チェック")
+    print(df_encoded)
+    # 相関を計算
+    bsmtqual_columns = [
+        col for col in df_encoded.columns if col.startswith("ExterQual" + "_")
+    ]
+    correlation_matrix = df_encoded.corr()["SalePrice"][bsmtqual_columns]
+
+    print("SalePrice vs GarageFinish")
+    print(correlation_matrix)
+
+    # ---------------------------文字列データ選定--------------------------------
     # cor_str_train_df = train_df[
     #     [
     #         "Neighborhood",
