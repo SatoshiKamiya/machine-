@@ -10,6 +10,18 @@ def main():
     test_df = pd.read_csv("data/house_prices/test.csv")
     total_df = pd.concat([train_df, test_df], ignore_index=True, sort=False)
 
+    # ---------------------------カラム相関チェック後抽出後データ--------------------------------
+    train_df = train_df[["SalePrice", "LotFrontage", "OverallQual", "YearBuilt", "YearRemodAdd", "MasVnrArea", "BsmtFinSF1", "TotalBsmtSF", 
+                         "1stFlrSF", "2ndFlrSF", "GrLivArea", "FullBath", "TotRmsAbvGrd", "Fireplaces", "GarageYrBlt", "GarageCars", "GarageArea",
+                          "WoodDeckSF", "OpenPorchSF"
+                         ]]
+    
+    #文字列は別途用意　まずは数値のみデータの外れ値と欠損値補完する
+
+
+    # -----------------------------------------------------------------------------------------
+
+
     # レコード数
     print("records count=", total_df.shape[0])
     # 型＆nullチェック
@@ -18,16 +30,16 @@ def main():
     print("head")
     print(total_df.head())
 
-    # 相関係数
-    numeric_df = train_df.select_dtypes(include=[float, int])
-    # カラムチェック
-    print("カラムの種類", numeric_df.columns)
+    # # 相関係数
+    # numeric_df = train_df.select_dtypes(include=[float, int])
+    # # カラムチェック
+    # print("カラムの種類", numeric_df.columns)
 
     # salePrices check
     print("セール価格の統計値")
     print(train_df["SalePrice"].describe())
 
-    # ---------------------------One-Hot Encoding--------------------------------
+    # ---------------------------One-Hot Encoding相関関係チェック--------------------------------
     # print("Neighborhood")
     # print(train_df["Neighborhood"].value_counts())
     # print("ExterQual")
@@ -39,21 +51,23 @@ def main():
     # print("GarageFinish")
     # print(train_df["GarageFinish"].value_counts())
 
-    train_df = train_df[["SalePrice", "ExterQual"]]
+    train_df = train_df[["SalePrice", "ExterQual", "BsmtQual", "BsmtQual"]]
 
     # One-Hot Encodingを適用
-    df_encoded = pd.get_dummies(train_df, columns=["ExterQual"]).astype(int)
+    # df_encoded = pd.get_dummies(train_df, columns=["ExterQual"]).astype(int)
+    df_encoded = pd.get_dummies(train_df).astype(int)
+
 
     print("中間チェック")
     print(df_encoded)
     # 相関を計算
-    bsmtqual_columns = [
-        col for col in df_encoded.columns if col.startswith("ExterQual" + "_")
-    ]
-    correlation_matrix = df_encoded.corr()["SalePrice"][bsmtqual_columns]
+    # bsmtqual_columns = [
+    #     col for col in df_encoded.columns if col.startswith("ExterQual" + "_")
+    # ]
+    # correlation_matrix = df_encoded.corr()["SalePrice"][bsmtqual_columns]
 
-    print("SalePrice vs GarageFinish")
-    print(correlation_matrix)
+    # print("SalePrice vs GarageFinish")
+    # print(correlation_matrix)
 
     # ---------------------------文字列データ選定--------------------------------
     # cor_str_train_df = train_df[
