@@ -1,7 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+from sklearn.ensemble import RandomForestRegressor
 
 def main():
     print("main処理開始")
@@ -59,6 +59,44 @@ def main():
     # 欠損値のある行番号を取得
     result = total_df[total_df["MasVnrArea"].isnull()].index
     print(result)
+
+    complement_MasVnrArea_df = total_df[
+        [
+            "OverallQual",
+            "MasVnrArea",
+            "TotalBsmtSF",
+            "1stFlrSF",
+            "GrLivArea",
+            "GarageCars",
+            "GarageArea",
+        ]
+    ]
+
+    # 相関係数チェック
+    df_corr = complement_MasVnrArea_df.corr()
+    print(df_corr)
+    print(type(df_corr))
+
+    # ランダムフォレストによる補完
+    print("ランダムフォレストによる補完開始")
+
+    # 学習データとテストデータに分離し、numpyに変換
+    known_target_df = complement_MasVnrArea_df.notnull().values
+    unknown_target_df = complement_MasVnrArea_df.isnull().values
+
+    # 学習データをX, yに分離
+    X = known_target_df[:, 1:]
+    y = known_target_df[:, 0]
+
+    # ランダムフォレストで推定モデルを構築
+    rfr = RandomForestRegressor(random_state=0, n_estimators=100, n_jobs=-1)
+    rfr.fit(X, y)
+
+    # 推定モデルを使って、テストデータのAgeを予測し、補完
+    predictedAges = rfr.predict(unknown_target_df[:, 1::])
+    complement_MasVnrArea_df.loc[(complement_MasVnrArea_df.isnull()), 'MasVnrArea'] = (
+        predictedAges
+    )
 
 
 # -----------------------------------------------------------------------------------------
