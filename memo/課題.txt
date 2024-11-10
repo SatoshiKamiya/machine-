@@ -1,2 +1,19 @@
+■コンペ
+1.Titanic: Machine Learning from Disaster
+2. House Prices - Advanced Regression Techniques
+3.Home Credit Default Risk
+　https://www.kaggle.com/competitions/home-credit-default-risk/overview
+4.Santander Customer Transaction Prediction
+　https://www.kaggle.com/competitions/santander-customer-transaction-prediction/overview
+5.Walmart Recruiting - Store Sales Forecasting
+
+
+
+
+
+
+
+
+
 ・特徴量エンジニアリングやワンホットエンコーディング等新たにカラムを作成した
 　時ようにカラム連結処理を加える
