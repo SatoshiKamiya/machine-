@@ -1,2 +1,40 @@
-site
+■サイト
 https://www.kaggle.com/competitions/santander-customer-transaction-prediction/overview
+
+■データセットの特徴
+　・カラム数が多い　←　200
+　・レコード数が多い　←　200000
+　・各カラム内のばらつきが少ない
+　・各カラム全体的に正規分布に従ってる
+　・ターゲットカラムの値は2値　そのうち10％が「1」
+　・
+　・
+
+
+■他の人の手法まとめ
+●kaggler name
+ Gabriel Preda
+　
+●処理の流れ
+　1.Test＆train：行列数チェック
+　2.Test＆train：ヘッドチェック
+　3.Test＆train：欠損値の数、欠損値の存在割合、データ型チェック
+　4.Test＆train：describeメソッドで統計量を表示
+　5.Test＆train：トレーニングとテスト間の散布図プロット（各カラム）
+　6.train：ターゲットカラムの値分布確認
+　7.train：ターゲットを対象としたカーネル密度推定（ノンパラメトリック推定）
+　8.Test＆train：トレーニングデータとテストデータを対象としたカーネル密度推定（ノンパラメトリック推定）
+　9.Test＆train：行ごとの平均値の分布
+ 10.Test＆train：列ごとの平均値の分布
+ 11.Test＆train：行ごとの標準偏差の分布
+ 12.Test＆train：列ごとの標準偏差の分布
+ 13.train：ターゲットの値ごとにグループ化された、トレーニング データセットの行ごとの平均値の分布
+　
+●ポイント
+
+　
+
+●参考
+https://www.kaggle.com/code/gpreda/santander-eda-and-prediction
+https://zerebom.hatenablog.com/entry/2019/04/12/210322
+https://club.informatix.co.jp/?p=1176
