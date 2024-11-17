@@ -7,8 +7,9 @@
 # 仮想環境構築
 
 ##コマンド
+- python main.py
+- myenv\Scripts\activate 
+　仮想環境の実行
 
 - python -m venv myenv :「myenv」という仮想環境の構築（path で通した python のバージョンが反映される）
 - pip install -r requirements.txt :モジュールを一括ダウンロード
-- myenv\Scripts\activate :仮想環境の実行
-- python main.py :main ファイル実行
