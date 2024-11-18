@@ -42,10 +42,37 @@ def main():
     print("値の分布チェック")
 
     print("train_df　ターゲット値可視化")
-    train_df.hist(figsize=(10, 10), bins=30)
-    plt.show()
+    # train_df.hist(figsize=(10, 10), bins=30)
+    # plt.show()
+
+    #------------------------------one hot encoding-----------------------------------
+    # obj_columns = ["loan_status", "person_home_ownership", "loan_intent", "loan_grade", "cb_person_default_on_file"]
+    # train_obj_df = train_df[obj_columns]
+
+
+    # # 各カラムの値と出現回数を取得
+    # print("各カラムの値と出現回数を取得")
+    # for column in train_obj_df.columns:
+    #     print(f"Column: {column}")
+    #     print(train_obj_df[column].value_counts())
+    #     print("\n")
 
     
+    # # One-Hot Encodingを適用
+    # df_encoded = pd.get_dummies(train_obj_df).astype(int)
+    # print("One-Hot Encodingを適用")
+    # print(df_encoded.head(10))
+
+    # correlation_matrix = df_encoded.corr()
+    # correlation_with_target = correlation_matrix["loan_status"].sort_values(ascending=False)
+
+    # # ガレージの外装仕上げカテゴリのみの相関を表示
+    # correlation_with_target[df_encoded.columns.str.startswith('person_home_ownership_')]
+    # print("loan_status vs person_home_ownership")
+    # print(correlation_with_target)
+
+
+
 
 if __name__ == "__main__":
     main()
