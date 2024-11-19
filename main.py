@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
 
 def main():
     print("main処理開始")
@@ -44,6 +45,21 @@ def main():
     print("train_df　ターゲット値可視化")
     # train_df.hist(figsize=(10, 10), bins=30)
     # plt.show()
+
+    #------------------------------labael encoding-----------------------------------
+    obj_columns = ["loan_status", "person_home_ownership", "loan_intent", "loan_grade", "cb_person_default_on_file"]
+    train_obj_df = train_df[obj_columns]
+    for column in train_obj_df.select_dtypes(include=['object']).columns:
+        train_obj_df[column] = LabelEncoder().fit_transform(train_obj_df[column])
+
+    print("train_obj_df 相関係数チェック")
+    corr_matrix = train_obj_df.select_dtypes(include="number").corr() #　数値のみのカラム抽出
+    print("相関係数チェック　ターゲット")
+    print(corr_matrix["loan_status"])
+    print("相関係数チェック　全体")
+    print(corr_matrix)
+
+    
 
     #------------------------------one hot encoding-----------------------------------
     # obj_columns = ["loan_status", "person_home_ownership", "loan_intent", "loan_grade", "cb_person_default_on_file"]
