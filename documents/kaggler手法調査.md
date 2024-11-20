@@ -19,18 +19,23 @@ https://www.kaggle.com/nazimcherpanov
 - nullチェック
 - データ型チェック
 - objectをラベルエンコーディングする
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+- 欠損値補完する（平均値）
+- 年齢に対しヒストグラムにプロット
+- person_home_ownershipをグラフで可視化してターゲットの割合を可視化
+- 箱ひげ図でグラフプロット　
+
+Data Preprocessing & Cleaning（データの前処理とクリーニング）
+■DataCleanerクラスを定義　
+ - fit_label_encoders：objectクラスでラベルエンコーディングするカラムを選択する処理
+ - transform_labels：fit_label_encodersで選択したカラムを実際にエンコーディングする処理
+ - impute_numeric：float, intクラスの欠損値補完　K近傍法で行っている
+
+- DataCleanerクラスを利用したデータクリーニング開始
+- トレーニングデータはfit_label_encoders処理をする
+- トレーニングデータ＆テストデータをラベルエンコーディングする
+- ラベルエンコーディング後、両データを欠損値補完する（impute_numeric）
+
+
 
 
 ##  ポイント
