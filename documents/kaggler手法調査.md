@@ -41,15 +41,17 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
 
 特徴量の作成（特徴量エンジニアリング）  
 ■比率　
- - income_to_age：収入/年齢
- - loan_to_income：ローン金額/年収
- - rate_to_loan：ローン利率/ローン金額　←　借入の条件やリスクを間接的に反映（重要らしい）
- - loan_to_employment：ローン金額/勤続年数
- - rate_to_credit_history： ローン利率/信用履歴の期間
- - age_to_credit_history：年齢/信用履歴の期間　←　相関がめちゃ高い
+ - income_to_age：収入/年齢　person_income/person_age【相関係数： 0.1】
+ - rate_to_loan：ローン利率/ローン金額　←　借入の条件やリスクを間接的に反映（重要らしい）　loan_int_rate/loan_amnt【相関係数：0.11】
+ - loan_to_employment：ローン金額/勤続年数　loan_amnt/person_emp_length【相関係数：0.1】
+ - rate_to_credit_history： ローン利率/信用履歴の期間　loan_int_rate/cb_person_cred_hist_length【相関係数：0.0】
+ - age_to_credit_history：年齢/信用履歴の期間　person_age/cb_person_cred_hist_length【相関係数： 0.87】　←　相関がめちゃ高い(箱ひげ図も形が似ている)
+ - income_to_loan：収入/ローン金額　person_income/loan_amnt【相関係数： 0.3】
+ - loan_to_income：ローン金額/年収　loan_amnt/person_income【相関係数： 0.3】
+ - rate_to_age：ローン利率/年齢　loan_int_rate/person_age【相関係数：0.0】
  - 
- - 
- - 
+
+■非線形変換
 
 
  - age_squared：
@@ -62,6 +64,28 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
 - target = 'loan_status'　ターゲットカラムを変数に格納している（good）
 - ワンホットで相関がみられない場合、ラベルエンコーディングで相関も見てみる
 - ターゲットと比較して相関は低かったが、異なる特徴量同士で相関が高い場合新たな新たな特徴量として生成してもよい
+- 特徴量エンジニアリングで、新たな特徴量を生成するため「比率」「非線形変換」・・・・等あり
+- 
+- 
+
+##  特徴量エンジニアリング
+■比率
+- 相関係数が近い者同士で組み合わせる
+- 箱ひげ図で似たような形の者同士で組み合わせる
+- 経験則で組み合わせる（業界の常識）
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+■非線形変換（対数、平方根、2乗など）
+- 見分け方：散布図や残差プロットなどで可視化　
+- 見分け方：特徴量（X軸）とターゲット（Y軸）の散布図（ペアプロット）を描く
+- 見分け方：カイ二乗検定
+- 
+- 
 - 
 - 
 - 
@@ -83,7 +107,8 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
 
 
 チャットGPTの回答
-このコードは、特徴量エンジニアリングを行うための関数 create_features を定義しています。train と test の両方のデータフレームに対して新しい特徴量を作成しています。以下は、このコードが具体的に何をしているかを説明します。
+このコードは、特徴量エンジニアリングを行うための関数 create_features を定義しています。
+train と test の両方のデータフレームに対して新しい特徴量を作成しています。以下は、このコードが具体的に何をしているかを説明します。
 
 目的
 元のデータセットから新しい情報を引き出す派生特徴量を作成し、モデルの精度向上を図る。

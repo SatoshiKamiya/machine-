@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
-
+import seaborn as sns
 def main():
     print("main処理開始")
 
@@ -13,6 +13,8 @@ def main():
 
     # 1つ目のモデル用
     test_df = pd.read_csv("data/test.csv") 
+
+    target = "loan_status"
 
      # トレーニングデータとテストデータを合体させる
     # test_df = pd.read_csv("data/test.csv") 
@@ -45,6 +47,12 @@ def main():
     print("train_df　ターゲット値可視化")
     # train_df.hist(figsize=(10, 10), bins=30)
     # plt.show()
+    number_columns = ["person_age", "person_income", "person_emp_length", "loan_amnt", "loan_int_rate", "loan_int_rate", "loan_percent_income", "cb_person_cred_hist_length"]
+    # train_num_df = train_df[number_columns]
+    train_num_df = train_df.select_dtypes(include="number")
+    sns.pairplot(train_num_df)  
+    plt.show() 
+    plt.close()  
 
     #------------------------------labael encoding-----------------------------------
     obj_columns = ["loan_status", "person_home_ownership", "loan_intent", "loan_grade", "cb_person_default_on_file"]
