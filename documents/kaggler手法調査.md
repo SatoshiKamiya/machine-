@@ -52,13 +52,26 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
  - 
 
 ■非線形変換
+ - age_squared：person_age　2乗
+ - log_income：person_income　対数
+ - age_cubed：person_age　3乗
+ - log_loan_amnt：loan_amnt　対数
+ - 
+ - 
+ - 
+ - 
 
-
- - age_squared：
- - log_income：
- - age_credit_history_interaction：
-
-
+■積
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 
 ##  ポイント
 - target = 'loan_status'　ターゲットカラムを変数に格納している（good）
@@ -73,9 +86,8 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
 - 相関係数が近い者同士で組み合わせる
 - 箱ひげ図で似たような形の者同士で組み合わせる
 - 経験則で組み合わせる（業界の常識）
-- 
-- 
-- 
+- 分子と分母を入れ替えて2つの特徴量を作ることは基本的に意味はない
+- 入れ替えても解釈的に意味をなせば、やる価値はあり（迷ったらやるのも手か？）
 - 
 - 
 - 
@@ -83,8 +95,8 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
 ■非線形変換（対数、平方根、2乗など）
 - 見分け方：散布図や残差プロットなどで可視化　
 - 見分け方：特徴量（X軸）とターゲット（Y軸）の散布図（ペアプロット）を描く
-- 見分け方：カイ二乗検定
-- 
+- 見分け方：カイ二乗検定 ←カテゴリカルデータ（object型のデータで今回でいうperson_home_ownershipを指す）
+- 全体の単位のオーダーを合わせるという意味でも利用する　大きい値はLOG、小さい値はべき乗
 - 
 - 
 - 

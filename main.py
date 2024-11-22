@@ -47,13 +47,11 @@ def main():
     print("train_df　ターゲット値可視化")
     # train_df.hist(figsize=(10, 10), bins=30)
     # plt.show()
-    number_columns = ["person_age", "person_income", "person_emp_length", "loan_amnt", "loan_int_rate", "loan_int_rate", "loan_percent_income", "cb_person_cred_hist_length"]
+    # number_columns = ["person_age", "person_income", "person_emp_length", "loan_amnt", "loan_int_rate", "loan_percent_income", "cb_person_cred_hist_length"]
+    number_columns = ["person_age", "loan_percent_income", "cb_person_cred_hist_length"]
     # train_num_df = train_df[number_columns]
-    train_num_df = train_df.select_dtypes(include="number")
-    sns.pairplot(train_num_df)  
-    plt.show() 
-    plt.close()  
-
+    sns.pairplot(train_df[number_columns], diag_kind="kde")  # diag_kind="kde"で対角線にカーネル密度推定を表示
+    plt.show()
     #------------------------------labael encoding-----------------------------------
     obj_columns = ["loan_status", "person_home_ownership", "loan_intent", "loan_grade", "cb_person_default_on_file"]
     train_obj_df = train_df[obj_columns]
