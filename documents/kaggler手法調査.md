@@ -58,21 +58,45 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
  - log_loan_amnt：loan_amnt　対数
  - 
  - 
- - 
- - 
 
 ■積
 - 
 - 
 - 
 - 
-- 
-- 
-- 
-- 
+
+■三角関数
+- age_sin：年齢を周期表現している　100で割ると値が-1~1までに収まる
+- age_cos：上記のcos版
 - 
 - 
 
+■その他
+●グループ化
+- rate_to_grade：ローンの各グレード（A～G）の内でローン利率の平均（各グレードをgroupy）
+- normalized_loan_amount：ローンを必要とする理由内でローン金額のZスコア（理由をgroupy）
+
+●high and low
+- high_loan_to_income：元カラム「loan_percent_income」が0.5以上　← 0 or 1の値をとる
+- is_new_credit_user：信用履歴の期間が1年以内　← 0 or 1の値をとる
+- high_interest_rate：ローン利率のうち平均値以上の値　← 0 or 1の値をとる
+
+●その他条件分岐
+- intent_home_match：ローンを必要とする理由が「HOMEIMPROVEMENT（改築）」且つ持ち家　← 0 or 1の値をとる
+- creditworthiness_score：信用スコアをあわらし「 所得/ローン金額×金利×信用履歴」
+- high_risk_flag：ローン収入の割合が0.4以上且つ、ローン率が平均より高い且つ、ローン返済失敗あり　← 0 or 1の値をとる
+- stability_score：勤続年数×年収/ローン金額×信用履歴の期間
+
+●分位数
+- income_home_mismatch：person_incomeで分位数0.8以上且つ賃貸　← 0 or 1の値をとる
+- high_loan_amount：ローン金額で分位数0.75以上　← 0 or 1の値をとる
+- age_income_mismatch：30歳未満且つ年収が分位数0.9以上　← 0 or 1の値をとる
+- 
+- 
+- 
+- 
+- 
+- 
 ##  ポイント
 - target = 'loan_status'　ターゲットカラムを変数に格納している（good）
 - ワンホットで相関がみられない場合、ラベルエンコーディングで相関も見てみる
