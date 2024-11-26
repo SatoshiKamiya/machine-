@@ -10,6 +10,8 @@ from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score, roc_curve
 import matplotlib.pyplot as plt
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+from sklearn.ensemble import VotingClassifier
 
 def main():
     print("main処理開始")
@@ -141,30 +143,59 @@ def main():
     
     models = {
         "LightGBM": LGBMClassifier(device='gpu', n_jobs=-1, verbose=-1),                      
-        # "XGBoost": XGBClassifier(eval_metric='logloss', tree_method='auto', verbosity=0)  
+        "XGBoost": XGBClassifier(eval_metric='logloss', tree_method='auto', verbosity=0)  
     }
     
     for model_name, model in models.items():
         model.fit(X_train, y_train)
         
         y_pred_proba = model.predict_proba(X_test)[:, 1]
-        
-        roc_auc = roc_auc_score(y_test, y_pred_proba)
-        print(f"{model_name} ROC AUC Score: {roc_auc:.4f}")
-        
-        fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
-        plt.figure(figsize=(4, 3))
-        plt.plot(fpr, tpr, label=f'{model_name} (area = {roc_auc:.4f})')
-        plt.plot([0, 1], [0, 1], 'k--')
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title(f'Receiver Operating Characteristic (ROC) Curve - {model_name}')
-        plt.legend(loc='lower right')
-        plt.show()
 
+  #------------------------------ROC曲線による確認-----------------------------------
+        # roc_auc = roc_auc_score(y_test, y_pred_proba)
+        # print(f"{model_name} ROC AUC Score: {roc_auc:.4f}")
+        
+        # fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
+        # plt.figure(figsize=(4, 3))
+        # plt.plot(fpr, tpr, label=f'{model_name} (area = {roc_auc:.4f})')
+        # plt.plot([0, 1], [0, 1], 'k--')
+        # plt.xlabel('False Positive Rate')
+        # plt.ylabel('True Positive Rate')
+        # plt.title(f'Receiver Operating Characteristic (ROC) Curve - {model_name}')
+        # plt.legend(loc='lower right')
+        # plt.show()
+  #------------------------------交差検証---------------------------------------------
+
+    for m_name, model in models.items():
+        stratified_cv = StratifiedKFold(n_splits=5)
+        cv_scores = cross_val_score(model, X, y, cv=stratified_cv, scoring='roc_auc')
+        print(f'------------{m_name}')
+        print("Cross-validation scores:", cv_scores)
+        print("Mean cross-validation score:", cv_scores.mean())
+
+  #------------------------------アンサンブル学習-------------------------------------
+
+    voting_clf = VotingClassifier(estimators=[(name, model) for name, model in models.items()], voting='soft')
+    stratified_cv = StratifiedKFold(n_splits=10)
+    cv_scores = cross_val_score(voting_clf, X, y, cv=stratified_cv, scoring='roc_auc')
+    print(f'------------Voting Classifier')
+    print("Cross-validation scores:", cv_scores)
+    print("Mean cross-validation score:", cv_scores.mean())
+
+
+    voting_clf.fit(X, y)
+
+    submission = pd.DataFrame(
+        {"id": test_df["id"], "SalePrice": voting_clf.predict_proba(test)[:,1]}
+    )
+    
+    # submission['loan_status'] = voting_clf.predict_proba(test)[:,1]
+    
+    submission.to_csv('submission.csv', index=False)
 
 
   #------------------------------ここから上はサイトからすべて引用-----------------------------------
+  #----------------------------------------------------------------------------------------------
 
     # print("相関係数チェック")
     # corr_matrix = train_df.select_dtypes(include="number").corr() #　数値のみのカラム抽出
