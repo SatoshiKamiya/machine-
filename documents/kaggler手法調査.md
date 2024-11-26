@@ -5,6 +5,10 @@
 Nazim Cherpanov  
 https://www.kaggle.com/nazimcherpanov
 
+
+## 関連サイト
+- https://www.kaggle.com/code/nazimcherpanov/0-96298-loan-approval-prediction#8.-Final-Model-Training
+
 ##  予測精度
 .96298
 
@@ -126,6 +130,36 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
 - 
 - 
 
+##  ROC曲線
+- モデルの精度を確認するための手法としてROC曲線を利用
+- 縦軸：TPR、横軸：FPRとおく
+- TPR：予測が正しいと判断＆実際に正しい（TP）/実際に正しい数
+- FPR：予測が正しいと判断＆実際は間違え（FP）/実際に間違っている数
+- AUC（Area Under the Curve）ROC曲線内の面積（1日回ほど正確）
+- AUC値（0.6〜0.7）: 要改善
+- AUC値（0.8〜0.9）: 非常に良いモデル。信頼性が高い。　
+- AUC値（0.9〜0.1）: 優れたモデル ←オーバーフィッティングの可能性もあり
+
+##  モデル：XGBoost
+- XGBClassifierの引数に値を入れていく
+- eval_metric：テストデータの評価指標を指定　logloss=負の対数尤度　mse=二乗平均平方誤差  
+  loglossの場合、2値分類問題や確率に基づく予測を評価する際に使用される
+- tree_method：使用するツリーメソッド　	auto/exact/approx/hist/gpu_hist  
+  GPU使ってなっかたら「gpu_hist」はやめたほうがよい
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+
 ##  課題
 - オリジナルデータの実態が分からん
 - target = 'loan_status'　ターゲットカラムを変数に格納している
@@ -134,12 +168,6 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
 - 
 - 
 - 
-
-## 関連サイト
-- https://www.kaggle.com/code/nazimcherpanov/0-96298-loan-approval-prediction#8.-Final-Model-Training
-
-
-
 
 
 チャットGPTの回答

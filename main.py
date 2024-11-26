@@ -141,7 +141,7 @@ def main():
     
     models = {
         "LightGBM": LGBMClassifier(device='gpu', n_jobs=-1, verbose=-1),                      
-        "XGBoost": XGBClassifier(eval_metric='logloss', tree_method='gpu_hist', verbosity=0)  
+        # "XGBoost": XGBClassifier(eval_metric='logloss', tree_method='auto', verbosity=0)  
     }
     
     for model_name, model in models.items():
