@@ -91,40 +91,42 @@ def main():
 
     def create_features(train, test):
         for df in [train, test]:
+            # 比率
             df['income_to_age'] = df['person_income'] / df['person_age']
             df['loan_to_income'] = df['loan_amnt'] / df['person_income']
             df['rate_to_loan'] = df['loan_int_rate'] / df['loan_amnt']
-            df['age_squared'] = df['person_age'] ** 2
-            df['log_income'] = np.log1p(df['person_income'])
-            df['age_credit_history_interaction'] = df['person_age'] * df['cb_person_cred_hist_length']
-            df['high_loan_to_income'] = (df['loan_percent_income'] > 0.5).astype(int)
-            df['loan_to_employment'] = df['loan_amnt'] / (df['person_emp_length'] + 1)
-            df['is_new_credit_user'] = (df['cb_person_cred_hist_length'] < 2).astype(int)
-            df['rate_to_grade'] = df.groupby('loan_grade')['loan_int_rate'].transform('mean')
-            df['high_interest_rate'] = (df['loan_int_rate'] > df['loan_int_rate'].mean()).astype(int)
-            df['age_to_credit_history'] = df['person_age'] / (df['cb_person_cred_hist_length'] + 1)
-            df['income_home_mismatch'] = ((df['person_income'] > df['person_income'].quantile(0.8)) & (df['person_home_ownership'] == 'RENT')).astype(int)
-            df['normalized_loan_amount'] = df.groupby('loan_intent')['loan_amnt'].transform(lambda x: (x - x.mean()) / x.std())
-            df['income_to_loan'] = df['person_income'] / df['loan_amnt']
-            df['age_cubed'] = df['person_age'] ** 3
-            df['log_loan_amnt'] = np.log1p(df['loan_amnt'])
-            df['age_interest_interaction'] = df['person_age'] * df['loan_int_rate']
-            df['credit_history_to_age'] = df['cb_person_cred_hist_length'] / df['person_age']
-            df['high_loan_amount'] = (df['loan_amnt'] > df['loan_amnt'].quantile(0.75)).astype(int)
-            df['rate_to_credit_history'] = df['loan_int_rate'] / (df['cb_person_cred_hist_length'] + 1)
-            df['intent_home_match'] = ((df['loan_intent'] == 'HOMEIMPROVEMENT') & (df['person_home_ownership'] == 'OWN')).astype(int)
-            df['creditworthiness_score'] = (df['person_income'] / (df['loan_amnt'] * df['loan_int_rate'])) * (df['cb_person_cred_hist_length'] + 1)
-            df['age_to_employment'] = df['person_age'] / (df['person_emp_length'] + 1)
-            df['age_income_mismatch'] = ((df['person_age'] < 30) & (df['person_income'] > df['person_income'].quantile(0.9))).astype(int)
             df['rate_to_age'] = df['loan_int_rate'] / df['person_age']
-            df['high_risk_flag'] = ((df['loan_percent_income'] > 0.4) &
-                                    (df['loan_int_rate'] > df['loan_int_rate'].mean()) &
-                                    (df['cb_person_default_on_file'] == 'Y')).astype(int)
-    
+            df['loan_to_employment'] = df['loan_amnt'] / (df['person_emp_length'] + 1)
+            df['age_to_credit_history'] = df['person_age'] / (df['cb_person_cred_hist_length'] + 1)
+            df['income_to_loan'] = df['person_income'] / df['loan_amnt']
+            df['credit_history_to_age'] = df['cb_person_cred_hist_length'] / df['person_age']
+            df['rate_to_credit_history'] = df['loan_int_rate'] / (df['cb_person_cred_hist_length'] + 1)
+            df['age_to_employment'] = df['person_age'] / (df['person_emp_length'] + 1)
+            # 乗数・対数・積
+            df['age_squared'] = df['person_age'] ** 2
+            df['age_cubed'] = df['person_age'] ** 3
+            df['log_income'] = np.log1p(df['person_income'])
+            df['log_loan_amnt'] = np.log1p(df['loan_amnt'])
+            df['age_credit_history_interaction'] = df['person_age'] * df['cb_person_cred_hist_length']
+            df['age_interest_interaction'] = df['person_age'] * df['loan_int_rate']
+            # 徐積複合
+            df['creditworthiness_score'] = (df['person_income'] / (df['loan_amnt'] * df['loan_int_rate'])) * (df['cb_person_cred_hist_length'] + 1)
+            df['stability_score'] = (df['person_emp_length'] * df['person_income']) / (df['loan_amnt'] * (df['cb_person_cred_hist_length'] + 1))
+            # ２値分類
+            df['high_loan_to_income'] = (df['loan_percent_income'] > 0.5).astype(int)
+            df['is_new_credit_user'] = (df['cb_person_cred_hist_length'] < 2).astype(int)
+            df['high_interest_rate'] = (df['loan_int_rate'] > df['loan_int_rate'].mean()).astype(int)
+            df['income_home_mismatch'] = ((df['person_income'] > df['person_income'].quantile(0.8)) & (df['person_home_ownership'] == 'RENT')).astype(int)
+            df['high_loan_amount'] = (df['loan_amnt'] > df['loan_amnt'].quantile(0.75)).astype(int)
+            df['age_income_mismatch'] = ((df['person_age'] < 30) & (df['person_income'] > df['person_income'].quantile(0.9))).astype(int)
+            df['intent_home_match'] = ((df['loan_intent'] == 'HOMEIMPROVEMENT') & (df['person_home_ownership'] == 'OWN')).astype(int)
+            df['high_risk_flag'] = ((df['loan_percent_income'] > 0.4) & (df['loan_int_rate'] > df['loan_int_rate'].mean()) & (df['cb_person_default_on_file'] == 'Y')).astype(int)
+            # グループ化
+            df['rate_to_grade'] = df.groupby('loan_grade')['loan_int_rate'].transform('mean')
+            df['normalized_loan_amount'] = df.groupby('loan_intent')['loan_amnt'].transform(lambda x: (x - x.mean()) / x.std())
+            # 三角関数
             df['age_sin'] = np.sin(2 * np.pi * df['person_age'] / 100)
             df['age_cos'] = np.cos(2 * np.pi * df['person_age'] / 100)
-            df['stability_score'] = (df['person_emp_length'] * df['person_income']) / (df['loan_amnt'] * (df['cb_person_cred_hist_length'] + 1))
-    
         return train, test
     
     train_df, test = create_features(train_df, test_df)
