@@ -143,16 +143,7 @@ Data Preprocessing & Cleaning（データの前処理とクリーニング）
 - tree_method：使用するツリーメソッド　	auto/exact/approx/hist/gpu_hist  
   GPU使ってなっかたら「gpu_hist」はやめたほうがよい
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+
 ##  モデル出力結果
 特徴量全部のせ  
 ------------LightGBM  
@@ -169,3 +160,157 @@ Mean cross-validation score: 0.9428548212254286
 - target = 'loan_status'　ターゲットカラムを変数に格納している
 - データクリーン以降処理がなくても変わらない！？（特徴量増やしても変わらない・・・・・）
 
+
+----------------------------------------------------------------------------------------------------------  
+  
+# Kaggler手法研究
+
+##  Kaggler
+Zongao Bian  
+https://www.kaggle.com/zongaobian
+
+
+## 関連サイト
+- https://www.kaggle.com/code/zongaobian/loan-approval-tutorial-on-xgboost
+
+##  予測精度
+.
+
+##  モデル
+- XGBoost
+
+##  処理の流れ
+- 欠損値チェック
+- 'person_emp_length'の欠損値を中央値で埋める
+- 'person_home_ownership', 'loan_intent', 'loan_grade', 'cb_person_default_on_file'をラベルエンコーディング
+- X = トレーニングデータからidとローンステータスを抜く
+- y = トレーニングデータのローンステータスのみ
+- X_test = テストデータのidを抜く
+- train_test_splitでモデル学習用データを生成
+- XGBClassifierでハイパーパラメータ設定
+- モデル学習
+- AUC平均0.92ほど
+- グリッドサーチによるハイパーパラメータ調整
+- 
+
+##  ポイント
+- 
+
+
+##  特徴量エンジニアリング
+- 
+
+##  ROC曲線
+- 
+
+##  モデル出力結果
+- 
+
+##  課題
+- 
+
+----------------------------------------------------------------------------------------------------------  
+  
+# Kaggler手法研究
+
+##  Kaggler
+Zongao Bian  
+https://www.kaggle.com/zongaobian
+
+
+## 関連サイト
+- https://www.kaggle.com/code/zongaobian/loan-approval-tutorial-on-xgboost
+
+##  予測精度
+.
+
+##  モデル
+- XGBoost
+
+##  処理の流れ
+- 欠損値チェック
+- 'person_emp_length'の欠損値を中央値で埋める
+- 'person_home_ownership', 'loan_intent', 'loan_grade', 'cb_person_default_on_file'をラベルエンコーディング
+- X = トレーニングデータからidとローンステータスを抜く
+- y = トレーニングデータのローンステータスのみ
+- X_test = テストデータのidを抜く
+- train_test_splitでモデル学習用データを生成
+- XGBClassifierでハイパーパラメータ設定
+- モデル学習
+- AUC平均0.92ほど
+- グリッドサーチによるハイパーパラメータ調整
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+
+##  ポイント
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+
+##  特徴量エンジニアリング
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+
+
+##  ROC曲線
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+##  モデル：XGBoost
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+
+##  モデル出力結果
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+
+
+##  課題
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
