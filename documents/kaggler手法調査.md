@@ -8,16 +8,17 @@ Competition Notebook
 https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction
 
 ## 関連サイト
-Easy to understand the competition  
-https://www.kaggle.com/code/chumajin/easy-to-understand-the-competition#JPX:-Tokyo-Stock-Exchange-Prediction
+【日本語】JPX LightGBM Demo  
+https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 
 ##  予測精度
-. 0.259
+
 
 ##  モデル
-- 
+- LightGBM
+
 ##  処理の流れ
-- 
+- ファイル読み込み　「stock_list.csv」「」「」
 - 
 - 
 - 
