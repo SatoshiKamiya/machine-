@@ -76,30 +76,14 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - 移動平均値と現在値の比率を導出し、項目として追加する関数
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+
 ● def calc_target_shift2(price):
+- 引数：price.csvのDataframe型
+- stock_prices.csv内にあるCloseの変化率を記録
+- 上記の値を"Target_shift2"カラムに記録していく
+- 終値の変動率を生成し、項目として追加する関数
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+
 ● def add_columns_per_code(price, functions):
 - 
 - 
