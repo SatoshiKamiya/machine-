@@ -25,7 +25,6 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - 
 - 
 
-
 ⬜︎データの結合
 - merge_data関数を定義
 - ファイル読み込みで行った結果得られたファイルデータを元に結合する
@@ -53,11 +52,126 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - AdjustedClose列の値に0がある場合、np.nanを代入
 - 欠損値に対してfill()関数を利用してNaNを代入
 - 
+
+
+⬜︎特徴量エンジニアリング
+● def calc_change_rate_base(column_name, periods):
+- 引数1：column_name（AdjustedCloseを渡していた）
+- 引数2：periods 営業日を渡す想定 ([3,9]を渡していた)
+- pct_changeで変化率を算出
+- stock_prices.csv内になるAdjustedClose（新しく生成した特徴量）の変化率(priod=[3,9])を記録
+- 上記の値を"{column_name}_change_rate_{period}"カラムに記録していく
+
+● def calc_volatility_base(column_name, periods):
+- 引数1：column_name（AdjustedCloseを渡していた）
+- 引数2：periods 営業日を渡す想定 ([3,9]を渡していた)
+- stock_prices.csv内になるAdjustedClose（新しく生成した特徴量）を対数に変換して差分(priod=[3,9])の標準偏差を算出
+- 上記の値を"{column_name}_volatility_{period}"カラムに記録していく
+- 
+- 
+
+● def calc_moving_average_rate_base(column_name, periods):
+- 引数1：column_name（Volumeを渡していた）
+- 引数2：periods 営業日を渡す想定 ([3,9]を渡していた)
+- 移動平均値と現在値の比率を導出し、項目として追加する関数
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+● def calc_target_shift2(price):
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+● def add_columns_per_code(price, functions):
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 - 
 - 
 - 
 - 
 
+● def add_columns_per_day(base_df):
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+● def generate_features(base_df):
+- calc_change_rate_base関数利用
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+● def select_features(feature_df, add_column_names, is_train):
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+● def preprocessor(base_df, is_train=True):
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 
 
 ##  ポイント
