@@ -85,48 +85,31 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - 
 
 ● def add_columns_per_code(price, functions):
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+- 引数1：price（base_df:merge_data関数で処理したDataFrame）
+- 引数2：functions 配列化した各関数 (calc_change_rate_base, calc_volatility_base, calc_moving_average_rate_base, calc_target_shift2)
+- 内部関数funcにより各関数を実行する関数を定義 ※1
+- priceソート（"SecuritiesCode", "Date"）
+- SecuritiesCodeでgroupbyしてfunc実行 ※1
+- reset_indexでインデックス振り直し
 - 
 
 ● def add_columns_per_day(base_df):
+- 引数1：price（base_df:merge_data関数で処理したDataFrame）
+- (終値 - 開始値) / 終値 を新規カラム  「diff_rate1」に格納
+- (最高値 - 最低値) / 終値 を新規カラム「diff_rate2」に格納
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+
 ● def generate_features(base_df):
+- 特徴量生成のコア関数
 - calc_change_rate_base関数利用
+- calc_volatility_base関数利用
+- calc_moving_average_rate_base関数利用
+- calc_target_shift2関数利用
+- add_columns_per_code 上記の関数をまとめて実行
+- add_columns_per_day 関数実行
+- add_column_names変数を定義　追加したカラム名をリスト化
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+
 ● def select_features(feature_df, add_column_names, is_train):
 - 
 - 
@@ -160,8 +143,8 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 
 ##  ポイント
 - groupbyとapplyによってgroupbyしたグループ内をまとめて処理できる
-- 
-- 
+- とapplyはセットであり、applayに関数名をセットするだけで、その関数に引数を渡さなくてもよい
+- 引数はgroupbyされたデータを自動で渡している
 - 
 - 
 - 
