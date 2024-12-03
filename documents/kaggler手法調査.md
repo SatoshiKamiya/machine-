@@ -99,7 +99,7 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - (最高値 - 最低値) / 終値 を新規カラム「diff_rate2」に格納
 - 
 
-● def generate_features(base_df):
+● def generate_features(base_df):　←　☆１
 - 特徴量生成のコア関数
 - calc_change_rate_base関数利用
 - calc_volatility_base関数利用
@@ -110,33 +110,53 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - add_column_names変数を定義　追加したカラム名をリスト化
 - 
 
-● def select_features(feature_df, add_column_names, is_train):
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+● def select_features(feature_df, add_column_names, is_train):　←　☆２
+- 引数1：feature_df - 特徴量生成後に得られたbase_df（DataFrame型）
+- 引数2：add_column_names - 特徴量生成後に得られた新規生成カラムラベルのリスト
+- 引数3：is_train - トレーニングモードか否か（デフォルトTrue）
+- 基本項目のラベルとして'RowId', 'Date', 'SecuritiesCode'を定義　←ラベルリスト★1
+- 引数2のadd_column_namesをソート　アルファベット順又は数値順になる　←　ラベルリスト★2
+- カテゴリ系の特徴量ラベルとして'NewMarketSegment', '33SectorCode', '17SectorCode'を定義　←　ラベルリスト★3
+- 目的変数ラベルとして'Target'を定義　←　ラベルリスト★4
+- feat_cols 特徴量として★2+★3のラベルリストを定義★5
+- feature_df内にカラムラベルを指定した項目を選択し絞込　←　★1 + ★5 + ★4 
+- feature_df内のカテゴリ系★3をcategory型へ変換（カテゴリデータを数値で管理　← enumのようなもの）
+- 分岐処理　トレーニングモードの場合：欠損値NANのあるレコードを削除
+- 分岐処理　推論モードの場合：欠損値補完
 - 
 ● def preprocessor(base_df, is_train=True):
+- 引数1：base_df - 特徴量生成後に得られたbase_df（DataFrame型）
+- 引数2：is_train - トレーニングモードか否か（デフォルトTrue）
+- 特徴量生成 generate_features（☆１）関数の実行
+- 特徴量選択 select_features（☆２）関数の実行
+
+
+下準備はここまで＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+
+
+⬜︎学習
+● def add_rank(df, col_name="pred"):
+- 引数1：df - 特徴量生成後に得られたbase_df（DataFrame型）
+- 引数2：col_name="pred" - トレーニングモードか否か（デフォルトTrue）
+- Dateでgroupbyでまとめてcol_nameでランク付けする　その結果をRankカラムへ格納する
+-Rankカラムの値をint型へ変更する
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+
+● calc_spread_return_sharpe(df: pd.DataFrame, portfolio_size: int = 200, toprank_weight_ratio: float = 2) -> float:
+- 引数1：df: pd.DataFrame　推論結果のデータ
+- 引数2：portfolio_size: int = 200　ポートフォリオサイズ（順位を上位または下位200位に設定するからか？）
+- 引数3：toprank_weight_ratio: float = 2) -> float　重み2~1の奴
+●_calc_spread_return_per_day(df, portfolio_size, toprank_weight_ratio):　←　内部関数
+- 引数1：df: pd.DataFrame　推論結果のデータ
+- 引数2：portfolio_size: int = 200　ポートフォリオサイズ（順位を上位または下位200位に設定するからか？）
+- 引数3：toprank_weight_ratio: float = 2) -> float　重み2~1の奴
+- 引数は外部関数と同じ
+- assert文でrankカラム内の最小値が0、最大値が199であることを確認
+- weightsの定義　等差数列の作成　2~1の間で200個の要素のリスト生成
+- purchase変数 Rankカラムでソートして、taegetカラムを選択し上位200までを抽出しweightsを
+  かけてすべて足す（アダマール積）さらにその値をweightsの平均で割る
+- purchase半数 変数 
 - 
 - 
 
