@@ -178,46 +178,25 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
  [('2020-12-23', '2021-11-01', '2021-12-01'), ('2021-01-23', '2021-12-01', '2022-01-01'), ('2021-02-23', '2022-01-01', '2022-02-01'),]
 - scores、models、paramsの空リスト生成
 - fold_paramsの各要素でループ処理 3×3あり()を1つの要素としている
+データの準備
 - トレーニングデータ train変数　feature_df内のDateカラムで条件分岐（指定日が2020-12-23以上で、2021-11-01未満）
 - 検証データ valid変数　feature_df内のDateカラムで条件分岐（指定日が2021-11-01以上で、2021-12-01未満）
-- 
-- 
-- 
-- 
+- X_train：trainよりfeat_cols（量的、質的データカラムのラベル）に該当するデータを選択
+- y_train：trainよりlabel_col（目的変数ラベル）に該当するデータを選択
+- X_valid：validよりfeat_cols（量的、質的データカラムのラベル）に該当するデータを選択
+- y_valid：validよりlabel_col（目的変数ラベル）に該当するデータを選択
+- lightgbmを利用するためにデータ加工　X_train, y_trainを使ってlgb_trainに格納
+- lightgbmを利用するためにデータ加工　X_valid, y_validを使ってlgb_y_validに格納
+- lightgbmのパラメータ設定（詳細カット）
+- ハイパーパラメータを設定（詳細カット）
+- 結果描画
+- 損失確認
+- 評価
+- 提出用データ加工
+- 終了
 - 
 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+
 
 
 ##  ポイント
@@ -229,7 +208,20 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - 
 - 
 - 
-
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 
 ##  特徴量エンジニアリング
 - 
