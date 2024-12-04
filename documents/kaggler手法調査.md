@@ -139,7 +139,7 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - 引数1：df - 特徴量生成後に得られたbase_df（DataFrame型）
 - 引数2：col_name="pred" - トレーニングモードか否か（デフォルトTrue）
 - Dateでgroupbyでまとめてcol_nameでランク付けする　その結果をRankカラムへ格納する
--Rankカラムの値をint型へ変更する
+- Rankカラムの値をint型へ変更する
 - 
 - 
 
@@ -154,9 +154,68 @@ https://www.kaggle.com/code/ikeppyo/jpx-lightgbm-demo/notebook
 - 引数は外部関数と同じ
 - assert文でrankカラム内の最小値が0、最大値が199であることを確認
 - weightsの定義　等差数列の作成　2~1の間で200個の要素のリスト生成
-- purchase変数 Rankカラムでソートして、taegetカラムを選択し上位200までを抽出しweightsを
-  かけてすべて足す（アダマール積）さらにその値をweightsの平均で割る
-- purchase半数 変数 
+- purchase変数 Rankカラムでソートして、taegetカラムを選択し上位200までを抽出しweightsをかけてすべて足す（アダマール積）さらにその値をweightsの平均で割る
+- pshort 変数 Rankカラムでソート(降順？)して、taegetカラムを選択し下位200までを抽出しweightsをかけてすべて足す（アダマール積）さらにその値をweightsの平均で割る
+- buf変数 Dateカラムをgroupbyしてapplyで_calc_spread_return_per_dayを実行
+- sharpe_ratio 変数 buf平均/buf標準偏差
+- 戻り値sharpe_ratioとして完了
+
+● def evaluator(df, pred):
+- 引数1 - df - 特徴量生成後に得られたbase_df（DataFrame型）
+- 引数2 - pred: pd.DataFrame　推論結果のデータ
+- 測用のデータフレームと、予測結果をもとに、スコアを計算する関数
+- 引数dfにpredカラムを新規作成し、引数predを格納する
+- add_rank関数実行
+- calc_spread_return_sharpe関数よりスコアを算出し、変数scoreに格納
+- 戻り値scoreとして完了
+
+■トレーニングモデル（コアモデル）  
+● def trainer(feature_df, feat_cols, label_col, fold_params, seed=2022):
+- 引数1 - feature_df: pd.DataFrame　preprocessor関数で得られるパラメータ 前処理で得られたデータ
+- 引数2 - feat_cols: pd.DataFrame　preprocessor関数で得られるパラメータ　量的、質的データカラムのラベル
+- 引数3 - label_col: pd.DataFrame　preprocessor関数で得られるパラメータ　目的変数ラベル
+- 引数4 - fold_params: pd.DataFrame　学習用データの開始日、学習用データの終了日＝検証用データの開始日、検証用データの終了日のリスト
+ [('2020-12-23', '2021-11-01', '2021-12-01'), ('2021-01-23', '2021-12-01', '2022-01-01'), ('2021-02-23', '2022-01-01', '2022-02-01'),]
+- scores、models、paramsの空リスト生成
+- fold_paramsの各要素でループ処理 3×3あり()を1つの要素としている
+- トレーニングデータ train変数　feature_df内のDateカラムで条件分岐（指定日が2020-12-23以上で、2021-11-01未満）
+- 検証データ valid変数　feature_df内のDateカラムで条件分岐（指定日が2021-11-01以上で、2021-12-01未満）
+- 
+- 
+- 
+- 
+- 
+
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 - 
 - 
 
