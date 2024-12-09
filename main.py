@@ -35,6 +35,16 @@ def main():
     sns.countplot(data=train, x="Rating")
     plt.title("Target distribution")
     plt.show()
+
+    # Map labels
+    train["Rating"] = train["Rating"] - 1 #rating=1~5 →　0~4へ変更
+
+    # ターゲット（rating）を取り除いたトレーニングデータ（8:2）
+    X_train, X_valid, _, _ = train_test_split(train, train["Rating"], test_size=0.2, shuffle=True, random_state=0)
+    
+    # カラム名を変更　Review → text、Rating → label
+    # 変更したデータを「new_train.csv」に保存する
+    X_train[["Review","Rating"]].rename(columns={"Review":"text", "Rating":"label"}).to_csv("new_train.csv", index=False)
     
 
 

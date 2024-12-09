@@ -24,7 +24,8 @@ https://www.kaggle.com/code/abdallahwagih/nlp-transformers
 ■Decoderクラスの定義
 ■Transformerクラスの定義
 
-■Fine-tuning
+~Fine-tuning~
+■データ読込
 - データの読み込み　
 - データチェック　Id、Review、Ratingを確認
 - ターゲットの分布を調べる　棒グラフ（x軸：rate　y軸：数）で1~5の評価でどのくらい数があるか表示
