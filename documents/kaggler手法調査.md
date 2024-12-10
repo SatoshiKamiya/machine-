@@ -76,7 +76,7 @@ https://www.kaggle.com/code/abdallahwagih/nlp-transformers
 
 
 ##  ポイント
-- 
+- トークンナイザーとは文章中の単語をトークン化（一定の規則に基づいた数字インデックスに変換）
 - 
 - 
 - 
