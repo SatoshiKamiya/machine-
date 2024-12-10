@@ -21,6 +21,7 @@ def main():
     print("main処理開始")
     # 変数の定義
     model_name = "distilbert-base-uncased"  # モデルの指定
+    model_name_out = f"{model_name}-finetuned-emotion"
     batch_size = 32  # バッチサイズ
     num_labels = 5  # らべる
 
@@ -99,7 +100,7 @@ def main():
     
 
     logging_steps = len(train_encoded["train"]) 
-    model_name_out = f"{model_name}-finetuned-emotion"
+    
 
     # Training hyper-parameters
     training_args = TrainingArguments(output_dir=model_name,
