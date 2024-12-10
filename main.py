@@ -15,8 +15,16 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import Trainer, TrainingArguments
 import datasets
 from datasets import load_dataset
+
+
 def main():
     print("main処理開始")
+    # 変数の定義
+    model_name = "distilbert-base-uncased"  # モデルの指定
+    batch_size = 32  # バッチサイズ
+    num_labels = 5  # らべる
+
+
     train = pd.read_csv("data/train.csv")
     test = pd.read_csv("data/test.csv")
     sub = pd.read_csv("data/sample_submission.csv")
@@ -68,8 +76,7 @@ def main():
     print(type(train_ds))
     print("train_ds　head")
     print(train_ds['train'][:5])
-    # モデルの指定
-    model_name = "distilbert-base-uncased"
+
     # トークナイザーの呼び出し（自動）
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
@@ -78,10 +85,79 @@ def main():
         return tokenizer(batch["text"], padding=True, truncation=True)
     
     
-    batch_size = 32
+
     train_encoded = train_ds.map(tokenize, batched=True, batch_size=batch_size)
     valid_encoded = valid_ds.map(tokenize, batched=True, batch_size=batch_size)
     test_encoded = test_ds.map(tokenize, batched=True, batch_size=batch_size)
+
+    # GPUが使えたらGPUを使う
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Download model
+  
+    model = (AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=num_labels).to(device))
+    
+
+    logging_steps = len(train_encoded["train"]) 
+    model_name_out = f"{model_name}-finetuned-emotion"
+
+    # Training hyper-parameters
+    training_args = TrainingArguments(output_dir=model_name,
+                                      num_train_epochs=3,
+                                      learning_rate=2e-5,
+                                      per_device_train_batch_size=batch_size,
+                                      per_device_eval_batch_size=batch_size,
+                                      weight_decay=0.01,
+                                      evaluation_strategy="epoch",
+                                      disable_tqdm=False,
+                                      logging_steps=logging_steps,
+                                      push_to_hub=False, 
+                                      log_level="error")
+
+    def compute_metrics(pred):
+        labels = pred.label_ids
+        preds = pred.predictions.argmax(-1)
+        f1 = f1_score(labels, preds, average="weighted")
+        acc = accuracy_score(labels, preds)
+        mae = mean_absolute_error(labels, preds)
+        return {"mae": mae, "accuracy": acc, "f1": f1}
+    
+
+    trainer = Trainer(model=model, args=training_args,
+                  compute_metrics=compute_metrics,
+                  train_dataset=train_encoded["train"],
+                  eval_dataset=valid_encoded["valid"],
+                  tokenizer=tokenizer)
+    
+
+    # Train model
+    trainer.train()
+
+    # Predictions on validation set
+    valid_preds = trainer.predict(valid_encoded["valid"])
+    valid_preds = np.argmax(valid_preds.predictions, axis=1)
+    
+    # Ground truth labels
+    y_valid = np.array(valid_ds["valid"]["label"])
+    labels = train_ds["train"].features["label"].names
+
+
+    # Plot confusion matrix
+    def plot_confusion_matrix(y_preds, y_true, labels):
+        cm = confusion_matrix(y_true, y_preds, normalize="true")
+        fig, ax = plt.subplots(figsize=(8, 8))
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
+        disp.plot(cmap="Blues", values_format=".2f", ax=ax, colorbar=False)
+        plt.title("Normalized confusion matrix")
+        ax.grid(False)
+        plt.show()
+    
+    plot_confusion_matrix(valid_preds, y_valid, labels)
+    
+    # Test set predictions
+    preds = trainer.predict(test_encoded["test"])
+    test_preds = np.argmax(preds.predictions, axis=1)
+
 
 
 
