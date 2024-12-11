@@ -117,6 +117,7 @@ def main():
                                       push_to_hub=False, 
                                       log_level="error")
 
+    # 評価関数
     def compute_metrics(pred):
         labels = pred.label_ids
         preds = pred.predictions.argmax(-1)
