@@ -100,6 +100,8 @@ def main():
     
 
     logging_steps = len(train_encoded["train"]) 
+    print("ログステップ")
+    print(logging_steps)
     
 
     # Training hyper-parameters
