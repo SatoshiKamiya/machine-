@@ -48,7 +48,9 @@ def main():
     # Map labels
     train["Rating"] = train["Rating"] - 1 #rating=1~5 →　0~4へ変更
 
-    # ターゲット（rating）を取り除いたトレーニングデータ（8:2）
+    # トレーニングデータを8:2で分割した結果でデータ
+    # X_train：8割のデータ（カラムフル）
+    # X_valid：2割のデータ（カラムフル）
     X_train, X_valid, _, _ = train_test_split(train, train["Rating"], test_size=0.2, shuffle=True, random_state=0)
     
     # カラム名を変更　Review → text、Rating → label
@@ -86,7 +88,7 @@ def main():
         return tokenizer(batch["text"], padding=True, truncation=True)
     
     
-
+    # 各文書の単語が数字に変換される
     train_encoded = train_ds.map(tokenize, batched=True, batch_size=batch_size)
     valid_encoded = valid_ds.map(tokenize, batched=True, batch_size=batch_size)
     test_encoded = test_ds.map(tokenize, batched=True, batch_size=batch_size)
@@ -161,6 +163,16 @@ def main():
     # Test set predictions
     preds = trainer.predict(test_encoded["test"])
     test_preds = np.argmax(preds.predictions, axis=1)
+
+    # Distribution of predictions
+    plt.figure(figsize=(10,4))
+    sns.histplot(test_preds+1)
+    plt.title("Distribution of final predictions")
+    plt.show()
+    
+    # Save predictions to csv
+    sub["Rating"] = test_preds+1
+    sub.to_csv("submission.csv", index=False)
 
 
 
