@@ -94,7 +94,9 @@ def main():
     test_encoded = test_ds.map(tokenize, batched=True, batch_size=batch_size)
 
     # GPUが使えたらGPUを使う
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    available_device = torch.cuda.is_available()
+    print("available_device=", available_device)
+    device = torch.device('cuda' if available_device else 'cpu')
 
     # Download model
   
