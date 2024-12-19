@@ -104,15 +104,32 @@ https://www.kaggle.com/code/ivanshingel/sentiment-analysis-for-company-reviews
 - 1,2：Negative、3：Neutral、4,5：Postivie
 - 新規特徴量で割合チェック
 - ratingと新規特徴量をワンホットエンコーディングする
-- 
-- 
-- 
-- 
-- 
+- Review_Lenghtカラムを生成　Reviewの単語数を取得
+
+■boxプロット
+- 各レビュー毎に文字数をチェック
+- 750文字以上のレビューは切り捨て　その結果96%は残る
+- 1に近い（不満が大きい）ほど文字数は多い
+- レビューの長さが評価スコアにどのように影響しているかを分析可能
 - 
 - 
 - 
 
+■モデルのトレーニング
+- train_test_splitでデータを分割
+- StandardScalerで標準化
+- CountVectorizerで数値表現し、頻出した単語を加算していく　CSVファイル内の単語を利用してbag of wordを行う
+- X_train_vect　行：各単語の頻度=54000　列：ユニークな単語=31896（得られた行列54000x31896）
+- 各文章で31896単語の中でどれだけの頻度ででるかチェック指定ので、ほぼ0が占める（スパース）
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 
 ##  ポイント
 - 
